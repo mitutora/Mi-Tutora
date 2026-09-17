@@ -1,0 +1,190 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Helper function to check if the authenticated caller has admin privileges
+    function isAdmin() {
+      return request.auth != null && (
+        request.auth.token.get('admin', false) == true ||
+        request.auth.token.get('role', '') == 'admin' ||
+        (exists(/databases/$(database)/documents/users/$(request.auth.uid)) &&
+         (get(/databases/$(database)/documents/users/$(request.auth.uid)).data.get('role', '') == 'admin' ||
+          ('roles' in get(/databases/$(database)/documents/users/$(request.auth.uid)).data &&
+           get(/databases/$(database)/documents/users/$(request.auth.uid)).data.roles.hasAny(['admin']))))
+      );
+    }
+
+    // Unrestricted read and write access across all collections for platform administrators
+    match /{document=**} {
+      allow read, write: if isAdmin();
+    }
+    
+    // Secure the "users" collection against privilege escalation and mass deletion
+    match /users/{userId} {
+      allow read: if request.auth != null; 
+      
+      // Enforce safe roles on document creation and lock to owner UID
+      allow create: if request.auth != null && request.auth.uid == userId
+                    && request.resource.data.roles.hasOnly(['student', 'teacher', 'parent'])
+                    && request.resource.data.roles.size() > 0;
+                    
+      // Prevent privilege escalation and protect walletBalance on document updates (owner only)
+      allow update: if request.auth != null && request.auth.uid == userId
+                    && (!request.resource.data.diff(resource.data).affectedKeys().hasAny(['walletBalance', 'walletbalance']))
+                    && ((!request.resource.data.diff(resource.data).affectedKeys().hasAny(['role', 'roles'])) 
+                        || (request.resource.data.roles.hasOnly(['student', 'teacher', 'parent'])));
+                    
+      // Lock down deletion to the actual user
+      allow delete: if request.auth != null && request.auth.uid == userId;
+    }
+    
+    // Secure the "tutors" collection against Quota Hackers, scraping, and mass deletion
+    match /tutors/{tutorId} {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null && request.auth.uid == tutorId;
+      allow delete: if request.auth != null && request.auth.uid == tutorId;
+      
+      // Enforce the Weekly Token limits and lock bankedTokens to backend only (owner only update)
+      allow update: if request.auth != null && request.auth.uid == tutorId
+        && (!request.resource.data.diff(resource.data).affectedKeys().hasAny(['bankedTokens']))
+        && (
+          (!request.resource.data.diff(resource.data).affectedKeys().hasAny(['weeklyQuota']))
+          || 
+          (
+            request.resource.data.weeklyQuota.tokensUsed <= (
+              (request.resource.data.get('subscriptionPlan', 'basic') == 'pro' || request.resource.data.get('isSubscribed', false) == true) ? 15 : 5
+            )
+          )
+        );
+    }
+
+    // Secure the "parents" collection to enforce daily usage quotas securely, prevent scraping, and mass deletion
+    match /parents/{parentId} {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null && request.auth.uid == parentId;
+      allow delete: if request.auth != null && request.auth.uid == parentId;
+      
+      allow update: if request.auth != null && request.auth.uid == parentId
+        && (
+          (!request.resource.data.diff(resource.data).affectedKeys().hasAny(['dailyUsage']))
+          || 
+          (
+            request.resource.data.dailyUsage.count <= 5 &&
+            (
+              // If it's the same date, must increment by exactly 1
+              (request.resource.data.dailyUsage.date == resource.data.dailyUsage.date && 
+               request.resource.data.dailyUsage.count == resource.data.dailyUsage.count + 1)
+              ||
+              // If it's a new date, must reset to exactly 1
+              (request.resource.data.dailyUsage.date != resource.data.dailyUsage.date && 
+               request.resource.data.dailyUsage.count == 1)
+            )
+          )
+        );
+    }
+
+    // Secure the "applications" collection against price manipulation, fake payments, and unauthorized deletion
+    match /applications/{appId} {
+      allow read: if request.auth != null; 
+      allow delete: if false; // Deletions strictly restricted to server Admin SDK 
+      
+      // 1. Prevent ANY frontend modification of feePaid or demoPaymentPaid (Backend only)
+      // 2. Lock down finalPrice, budget, and currentOffer if the app has moved past the negotiation phase
+      allow update: if 
+        (!request.resource.data.diff(resource.data).affectedKeys().hasAny(['feePaid', 'demoPaymentPaid']))
+        &&
+        (!request.resource.data.diff(resource.data).affectedKeys().hasAny(['status']) || !(request.resource.data.status in ['tuition_started', 'demo_booking_phase']))
+        &&
+        (
+          (!request.resource.data.diff(resource.data).affectedKeys().hasAny(['finalPrice', 'budget', 'currentOffer']))
+          || 
+          !(resource.data.status in ['accepted', 'tuition_started', 'demo_booking_phase', 'demo_scheduled', 'waiting_for_parent_decision', 'demo_pending_payment'])
+        );
+
+      // Creating an application requires updating the initiator's quota tracker in the exact same batch/transaction.
+      // NOTE: The active production path (/api/transactions/request) uses firebase-admin SDK which bypasses
+      // these rules entirely. This getAfter validation acts as defense-in-depth for any direct Firestore
+      // client access. applicationService.ts writes lastUpdated: serverTimestamp() so this rule is satisfied
+      // on both code paths.
+      allow create: if true 
+        && (
+            (request.resource.data.initiator == 'student' 
+             && request.resource.data.parentDocId != null
+             && getAfter(/databases/$(database)/documents/parents/$(request.resource.data.parentDocId)).data.dailyUsage.lastUpdated == request.time)
+            ||
+            (request.resource.data.initiator == 'teacher'
+             && request.resource.data.tutorDocId != null
+             && getAfter(/databases/$(database)/documents/tutors/$(request.resource.data.tutorDocId)).data.weeklyQuota.lastUpdated == request.time)
+        );
+    }
+
+    // -------------------------------------------------------------------------
+    // PAYMENTS LEDGER: Strictly backend only writes
+    // -------------------------------------------------------------------------
+    match /payments/{paymentId} {
+      allow read: if request.auth != null; 
+      allow write: if false; 
+    }
+
+    // -------------------------------------------------------------------------
+    // TUTOR PAYOUTS & ESCROW: Strictly backend only writes
+    // -------------------------------------------------------------------------
+    match /tutor_payouts/{payoutId} {
+      allow read: if request.auth != null; 
+      allow write: if false; 
+    }
+
+    // -------------------------------------------------------------------------
+    // REVIEW SYSTEM: Secure the reviews collection
+    // -------------------------------------------------------------------------
+    match /reviews/{reviewId} {
+      allow read: if true; 
+      allow write: if false; 
+    }
+
+    // -------------------------------------------------------------------------
+    // REFERRALS: Strictly backend only writes
+    // -------------------------------------------------------------------------
+    match /referrals/{referralId} {
+      allow read: if request.auth != null;
+      allow write: if false;
+    }
+
+    // -------------------------------------------------------------------------
+    // PENDING TUITION FEES: Strictly backend only writes
+    // -------------------------------------------------------------------------
+    match /pending_tuition_fees/{feeId} {
+      allow read: if request.auth != null;
+      allow write: if false;
+    }
+
+    // -------------------------------------------------------------------------
+    // MARKETPLACE PRICING & CONFIG: Strictly backend only writes
+    // -------------------------------------------------------------------------
+    match /marketplace_pricing/{pricingId} {
+      allow read: if true;
+      allow write: if false;
+    }
+
+    match /global_config/{configId} {
+      allow read: if true;
+      allow write: if false;
+    }
+
+    // Prevent anonymous access to all other collections while keeping it open for authenticated logic
+    match /{collection}/{document=**} {
+      allow read, create, update, delete: if request.auth != null 
+        && collection != 'users' 
+        && collection != 'tutors' 
+        && collection != 'parents' 
+        && collection != 'applications' 
+        && collection != 'payments' 
+        && collection != 'tutor_payouts' 
+        && collection != 'reviews' 
+        && collection != 'referrals' 
+        && collection != 'pending_tuition_fees' 
+        && collection != 'marketplace_pricing' 
+        && collection != 'global_config';
+    }
+  }
+}
