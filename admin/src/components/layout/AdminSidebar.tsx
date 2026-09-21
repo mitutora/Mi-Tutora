@@ -9,6 +9,7 @@ import {
   GraduationCap,
   UserMinus,
   WalletCards,
+  Users,
   LogOut,
   ShieldCheck,
   X
@@ -23,6 +24,7 @@ interface AdminSidebarProps {
 
 const navItems = [
   { label: "Overview", href: "/", icon: LayoutDashboard },
+  { label: "User Directory", href: "/users", icon: Users },
   { label: "Demo Phase", href: "/demos", icon: CalendarDays },
   { label: "Hired Teachers", href: "/tuitions", icon: GraduationCap },
   { label: "Removal Requests", href: "/cancellations", icon: UserMinus },

@@ -14,6 +14,7 @@ const titles: Record<string, string> = {
   "/tuitions": "Active Hired Tuitions",
   "/cancellations": "Teacher Removal & Cancellation Requests",
   "/payouts": "Manual Payouts Action Queue",
+  "/users": "User Directory & Management",
 };
 
 export function AdminLayoutWrapper({ children }: { children: React.ReactNode }) {
