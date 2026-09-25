@@ -1,6 +1,6 @@
 # Database Architecture & Firestore Schema Specification
 
-This document provides a comprehensive reference for the Cloud Firestore database architecture supporting the Mi-Tutora platform. It details all 14 active collections, primary key strategies, data types, field constraints, expected values, business logic dependencies, and cross-references with the application codebase.
+This document provides a comprehensive reference for the Cloud Firestore database architecture supporting the Mi-Tutora platform. It details all 16 active collections, primary key strategies, data types, field constraints, expected values, business logic dependencies, and cross-references with the application codebase.
 
 ---
 
@@ -23,6 +23,9 @@ erDiagram
     APPLICATIONS ||--o| TUTOR_PAYOUTS : "applicationDocId (60% escrow)"
     APPLICATIONS ||--o| PENDING_TUITION_FEES : "applicationDocId"
     APPLICATIONS ||--o{ REVIEWS : "applicationDocId"
+    
+    GROUPS ||--o{ ADMIN_LEAD_REQUESTS : "groupDocId"
+    TUTORS ||--o{ ADMIN_LEAD_REQUESTS : "tutorDocId"
     
     USERS ||--o{ REFERRALS : "referrerId / referredUserId"
     USERS ||--o{ PAYMENTS : "userId (ledger owner)"
@@ -74,6 +77,8 @@ erDiagram
 | `whatsapp` | `string` | 10-digit mobile string | WhatsApp contact number for scheduling notifications. | `web/src/app/dashboard/student/page.tsx` |
 | `area` / `city` / `pincode` | `string` | Neighborhood / City / Postal code | Optional home residence location for offline tuition matching. | `web/src/components/DemoForm.tsx` |
 | `dailyUsage` | `map` | `{ date: string, count: number, lastUpdated: Timestamp }` | Anti-spam daily rate-limiting counter for demo requests and applications. | `web/src/types/models.ts` |
+| `managedByAdmin` | `boolean` | `true` \| `false` | Indicates parent profile was manually onboarded by platform administrator via phone consultation. | `admin/src/app/manual-leads/page.tsx` |
+| `source` | `string` | `'manual_call'` \| `'web'` | Lead origin channel. | `admin/src/app/manual-leads/page.tsx` |
 | `createdAt` | `Timestamp` \| `number` | Firestore Timestamp or epoch ms | Parent profile registration timestamp. | `web/src/context/AuthContext.tsx` |
 
 
@@ -182,6 +187,7 @@ erDiagram
 | `preferredTimeRange`| `string` | e.g. `'Evening (4 PM - 8 PM)'` | Daily preferred study window. | `web/src/types/models.ts` |
 | `isAvailable` | `boolean` | `true` \| `false` | Concurrency lock. Flipped to `false` when active in an ongoing tuition/demo. | `web/src/utils/studentAvailability.ts:L26` |
 | `pendingRequests`| `string[]` | Array of application IDs | Active application references for queue enforcement. | `web/src/app/dashboard/student/page.tsx` |
+| `managedByAdmin` | `boolean` | `true` \| `false` | Concurrency lock flag tracking if learner was created via Admin manual intake. | `admin/src/app/manual-leads/page.tsx` |
 | `createdAt` | `number` | Epoch timestamp in milliseconds | Student profile registration timestamp. | `web/src/types/models.ts` |
 
 
@@ -217,6 +223,10 @@ erDiagram
 | `totalBudget` | `number` | Aggregated monthly budget in INR | Sum of all member students' budgets. | `web/src/types/models.ts` |
 | `isGroup` | `boolean` | `true` \| `false` | `true` if group contains multiple students (> 1), `false` for single-learner groups. | `web/src/components/DemoForm.tsx` |
 | `status` | `string` | `'active'` \| `'closed'` | Lifecycle of the group. | `web/src/utils/groupUtils.ts` |
+| `managedByAdmin` | `boolean` | `true` \| `false` | Distinguishes concierge leads onboarded by admin from self-serve organic parents. | `admin/src/app/manual-leads/page.tsx` |
+| `source` | `string` | `'manual_call'` \| `'web'` | Lead origin channel. | `admin/src/app/manual-leads/page.tsx` |
+| `adminNotes` | `string` | Consultation text | Free-form consultation notes taken during parent phone call. | `admin/src/app/manual-leads/page.tsx` |
+| `adminPhone` | `string` | e.g. `'+917483034168'` | Admin helpline contact for phone coordination. | `admin/src/app/manual-leads/page.tsx` |
 | `createdAt` | `number` | Epoch timestamp in milliseconds | Group creation timestamp. | `web/src/types/models.ts` |
 | `updatedAt` | `number` | Epoch timestamp in milliseconds | Group last modification timestamp. | `web/src/types/models.ts` |
 
@@ -256,6 +266,7 @@ erDiagram
 | `studentsDetails` | `object[]` | Array of student snapshot summaries | Cached snapshot of student details for fast tutor browsing. | `web/src/utils/groupUtils.ts:L71` |
 | `status` | `string` | `'open'` \| `'accepted'` \| `'closed'` | Open for tutor applications or filled. | `web/src/utils/groupUtils.ts:L76` |
 | `acceptedTutorId`| `string` | Tutor Auth UID or empty `""` | Assigned tutor once request is closed. | `web/src/utils/groupUtils.ts:L77` |
+| `managedByAdmin` | `boolean` | `true` \| `false` | Distinguishes admin-managed leads from self-serve organic marketplace broadcasts. | `admin/src/app/manual-leads/page.tsx` |
 | `createdAt` | `number` | Epoch millisecond timestamp | Creation date of request. | `web/src/utils/groupUtils.ts:L84` |
 
 
@@ -303,6 +314,11 @@ erDiagram
 | `gmeetLink` | `string` | Valid Google Meet, Zoom, or Teams URL | Meeting link submitted by tutor. Stored redundantly or in `privateData`. Locked until 5 min before demo. | `web/src/app/api/save-demo-link/route.ts` |
 | `feePaid` | `boolean` | `true` \| `false` | Indicates whether first month tuition fee is settled. | `web/src/app/api/transactions/hire/route.ts` |
 | `startDate` | `Timestamp` | Firestore Timestamp | Hire date when 7-day post-trial tuition starts. | `web/src/app/api/transactions/hire/route.ts` |
+| `cancellationRequested` | `boolean` | `true` \| `false` | Indicates student-side cancellation/replacement request submitted. | `web/src/app/api/transactions/cancel-tuition/route.ts`, `admin/src/app/cancellations/page.tsx` |
+| `cancellationRequestedAt` | `Timestamp` | Firestore Timestamp | Timestamp when cancellation was requested by the parent. | `web/src/app/api/transactions/cancel-tuition/route.ts` |
+| `cancellationWithdrawnAt` | `Timestamp` | Firestore Timestamp | Timestamp when a pending cancellation request was retracted. | `web/src/app/api/transactions/cancel-tuition/route.ts` |
+| `cancellationProratedFee` | `number` | Numeric amount in INR | Pro-rated fee calculated for days elapsed during the 7-day post-trial window. | `web/src/app/api/transactions/cancel-tuition/route.ts` |
+| `cancellationDaysElapsed` | `number` | Integer (1 to 7) | Number of class days elapsed between start date and cancellation request. | `web/src/app/api/transactions/cancel-tuition/route.ts` |
 | `createdAt` | `Timestamp` | Firestore Timestamp | Initial application proposal creation timestamp. | `web/src/app/api/transactions/request/route.ts` |
 | `updatedAt` | `Timestamp` | Firestore Timestamp | Timestamp of most recent negotiation, schedule, or status change. | `web/src/app/api/transactions/*` |
 | `studentIds` | `string[]` | Array of student IDs | **Legacy alias** for `studentDocIds` present in older application records. Read both fields defensively; write only `studentDocIds` for new records. | `web/src/types/models.ts:L24` |
@@ -521,6 +537,30 @@ erDiagram
 
 ---
 
+### 2.16 Collection: `admin_lead_requests`
+- **Purpose**: Tracks expressions of interest submitted by verified teachers who wish to take up an admin-managed phone consultation inquiry. Bypasses the online demo booking and escrow payment pipeline.
+- **Document ID (`doc.id`)**: Auto-generated Firestore document ID.
+- **Security Rule**: Read/write restricted to authenticated tutors (owner) or platform administrators (`isAdmin()`).
+
+| Field Name | Type | Expected Values / Format | Description & Business Rules | Codebase Reference |
+| :--- | :--- | :--- | :--- | :--- |
+| `id` | `string` | Auto-generated Firestore ID | Primary document identifier. | `admin/src/app/manual-leads/page.tsx` |
+| `groupDocId` | `string` | Foreign key to `groups.id` | Target inquiry group document ID. | `web/src/app/dashboard/teacher/page.tsx` |
+| `groupId` | `string` | `MTG` + 6 uppercase alphanumeric | Cosmetic group tracking identifier. | `web/src/app/dashboard/teacher/page.tsx` |
+| `tutorDocId` | `string` | Firebase Auth UID | The applicant teacher's primary authentication ID. | `web/src/app/dashboard/teacher/page.tsx` |
+| `tutorId` | `string` | `MTT` + 6 uppercase alphanumeric | Public cosmetic ID of the applicant tutor. | `web/src/app/dashboard/teacher/page.tsx` |
+| `tutorName` | `string` | Full name string | Display name of the applicant teacher. | `web/src/app/dashboard/teacher/page.tsx` |
+| `tutorPhone` | `string` | 10-digit mobile string | Direct phone number of applicant teacher for admin callback. | `web/src/app/dashboard/teacher/page.tsx` |
+| `tutorEmail` | `string` | Valid email string | Contact email of applicant teacher. | `web/src/app/dashboard/teacher/page.tsx` |
+| `tutorRating` | `number` | Float (1.0 to 5.0) | Current platform star rating of teacher. | `web/src/app/dashboard/teacher/page.tsx` |
+| `tutorSubjects`| `string[]` | Array of subjects taught | Subject qualifications of the educator. | `web/src/app/dashboard/teacher/page.tsx` |
+| `tutorExperience`| `string` | e.g. `'3-5 Years'`, `'Fresher'` | Teacher professional experience tier. | `web/src/app/dashboard/teacher/page.tsx` |
+| `tutorMode` | `string` | `'Offline'`, `'Online'`, `'Both'` | Delivery preference of educator. | `web/src/app/dashboard/teacher/page.tsx` |
+| `appliedAt` | `number` | Epoch timestamp in milliseconds | Timestamp when teacher clicked "Send Request to Admin". | `web/src/app/dashboard/teacher/page.tsx` |
+| `status` | `string` | `'pending_review'`, `'contacted'`, `'selected'`, `'closed'` | Administrative review state. | `admin/src/app/manual-leads/page.tsx` |
+
+---
+
 ## 3. Codebase vs. Live Dump Discrepancy & Latent Fields Analysis
 
 When comparing the static documents dumped by `load_data.js` against the full production TypeScript codebase, several **latent fields and edge-case collections** exist in the code that were absent from the live database dump because specific user actions (e.g. withdrawals, cancellations, or referral payouts) had not yet occurred in that test environment.
@@ -576,6 +616,8 @@ The following active collections may not appear in a fresh database snapshot bec
 | `reviews` | `applicationDocId` | `applications` | 1:1 | Proof of completed tuition. |
 | `tutor_payouts` | `applicationDocId` | `applications` | 1:1 | The tuition agreement this escrow settles. |
 | `tutor_payouts` | `tutorDocId` | `tutors` | N:1 | The educator receiving the 60% disbursement. |
+| `admin_lead_requests` | `groupDocId` | `groups` | N:1 | Target manual phone inquiry the teacher applied to. |
+| `admin_lead_requests` | `tutorDocId` | `tutors` | N:1 | The applicant teacher who submitted the concierge request. |
 
 ---
 

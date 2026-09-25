@@ -12,6 +12,7 @@ import {
   Users,
   LogOut,
   ShieldCheck,
+  PhoneCall,
   X
 } from "lucide-react";
 import Image from "next/image";
@@ -25,6 +26,7 @@ interface AdminSidebarProps {
 const navItems = [
   { label: "Overview", href: "/", icon: LayoutDashboard },
   { label: "User Directory", href: "/users", icon: Users },
+  { label: "Phone Inquiries", href: "/manual-leads", icon: PhoneCall },
   { label: "Demo Phase", href: "/demos", icon: CalendarDays },
   { label: "Hired Teachers", href: "/tuitions", icon: GraduationCap },
   { label: "Removal Requests", href: "/cancellations", icon: UserMinus },

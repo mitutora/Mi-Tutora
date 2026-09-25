@@ -1,5 +1,5 @@
 import React from 'react';
-import { Users, X, CheckCircle2, CalendarDays, ShieldCheck, Coins, Lock, Info } from 'lucide-react';
+import { Users, X, CheckCircle2, CalendarDays, ShieldCheck, Coins, Lock, Info, PhoneCall, Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
 
 interface StudentViewModalProps {
@@ -15,6 +15,9 @@ interface StudentViewModalProps {
   quotaExceeded: boolean;
   onUpgradeRequested?: () => void;
   offerLoading: boolean;
+  isAppliedAdminLead?: boolean;
+  onSendAdminLeadRequest?: (group: any) => Promise<any> | void;
+  isSendingAdminRequest?: boolean;
 }
 
 export function StudentViewModal({
@@ -29,7 +32,10 @@ export function StudentViewModal({
   handleDirectRequestDemo,
   quotaExceeded,
   onUpgradeRequested,
-  offerLoading
+  offerLoading,
+  isAppliedAdminLead,
+  onSendAdminLeadRequest,
+  isSendingAdminRequest
 }: StudentViewModalProps) {
   const [asyncParentId, setAsyncParentId] = React.useState<string>('');
   const [asyncGroupId, setAsyncGroupId] = React.useState<string>('');
@@ -89,6 +95,8 @@ export function StudentViewModal({
   const month1TutorShare = Math.round(effectiveBudget * 0.60);
   const month2TutorShare = effectiveBudget;
 
+  const isManagedByAdmin = Boolean(selectedViewUser?.managedByAdmin);
+
   return (
     <div className="fixed inset-0 z-[100] flex items-center sm:items-start justify-center p-3 sm:p-4 bg-gray-900/60 backdrop-blur-sm overflow-y-auto">
       <div className="bg-white rounded-3xl w-full max-w-2xl shadow-2xl relative my-auto sm:my-8 max-h-[92vh] flex flex-col overflow-hidden">
@@ -99,14 +107,20 @@ export function StudentViewModal({
           <X className="w-5 h-5" />
         </button>
         
-        <div className="bg-[#00a992] p-5 sm:p-8 md:p-10 text-white flex-shrink-0 relative overflow-hidden">
+        <div className={`p-5 sm:p-8 md:p-10 text-white flex-shrink-0 relative overflow-hidden ${isManagedByAdmin ? 'bg-gradient-to-r from-indigo-700 via-indigo-800 to-slate-900' : 'bg-[#00a992]'}`}>
           <div className="relative z-10 flex items-start gap-4 sm:gap-6">
             <div className="w-14 h-14 sm:w-20 sm:h-20 bg-white/20 rounded-2xl flex items-center justify-center text-2xl sm:text-4xl font-black backdrop-blur-md shadow-inner border border-white/30 flex-shrink-0">
               {((selectedViewUser.students?.[0]?.guardianName || selectedViewUser.students?.[0]?.parentName || selectedViewUser.guardianName || selectedViewUser.parentName || selectedViewUser.name)?.charAt(0) || 'S')}
             </div>
             <div>
               <h3 className="text-xl sm:text-2xl md:text-3xl font-black text-white tracking-tight">{selectedViewUser.students?.[0]?.guardianName || selectedViewUser.students?.[0]?.parentName || selectedViewUser.parentName || selectedViewUser.guardianName || 'Parent'}</h3>
-              <div className="flex gap-2 mt-1.5 flex-wrap">
+              <div className="flex gap-2 mt-1.5 flex-wrap items-center">
+                {isManagedByAdmin && (
+                  <span className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-white/20 text-white font-bold uppercase tracking-wider text-xs rounded-md border border-white/30 shadow-sm backdrop-blur-xs">
+                    <PhoneCall className="w-3 h-3 text-indigo-200" />
+                    <span>Managed by Admin</span>
+                  </span>
+                )}
                 {(() => {
                   const parentId = selectedViewUser.parentId || selectedViewApp?.parentId || selectedViewUser.students?.[0]?.parentId || asyncParentId;
                   const rawGroupId = selectedViewUser.groupId || selectedViewApp?.groupId || selectedViewUser.students?.[0]?.groupId || asyncGroupId;
@@ -136,8 +150,26 @@ export function StudentViewModal({
 
         <div className="p-4 sm:p-8 md:p-10 overflow-y-auto">
           <div className="space-y-8">
-            {/* Contact Information Block */}
-            {(!selectedViewApp || !['demo_booking_phase', 'demo_scheduled', 'waiting_for_parent_decision', 'demo_booked', 'tuition_started', 'confirmed', 'accepted'].includes(selectedViewApp.status)) ? (
+            {/* Admin Lead Notice or Contact Information Block */}
+            {isManagedByAdmin ? (
+              <div className="bg-indigo-50/90 rounded-2xl p-5 border border-indigo-200 space-y-2">
+                <div className="flex items-center gap-2">
+                  <PhoneCall className="w-4 h-4 text-indigo-600" />
+                  <h4 className="text-xs font-black uppercase tracking-wider text-indigo-900">
+                    Mi-Tutora Admin Phone Consultation Lead
+                  </h4>
+                </div>
+                <p className="text-xs text-indigo-800 font-medium leading-relaxed">
+                  This tuition request is managed directly by Mi-Tutora Admin. Trial demo sessions, schedule adjustments, and tuition payments are coordinated offline via phone/WhatsApp consultation.
+                </p>
+                {selectedViewUser.adminNotes && (
+                  <div className="bg-white/80 p-3 rounded-xl border border-indigo-100 text-xs text-indigo-950 font-medium italic mt-2">
+                    <span className="font-bold not-italic text-indigo-800">Admin Notes: </span>
+                    {selectedViewUser.adminNotes}
+                  </div>
+                )}
+              </div>
+            ) : (!selectedViewApp || !['demo_booking_phase', 'demo_scheduled', 'waiting_for_parent_decision', 'demo_booked', 'tuition_started', 'confirmed', 'accepted'].includes(selectedViewApp.status)) ? (
               <div className="bg-orange-50 rounded-2xl p-6 border border-orange-100 flex items-center justify-center">
                 <p className="text-sm font-bold text-orange-600 text-center">Contact details will be revealed once the demo is booked or tuition is active.</p>
               </div>
@@ -379,6 +411,44 @@ export function StudentViewModal({
         
         {/* Actions */}
         {(() => {
+          if (isManagedByAdmin) {
+            return (
+              <div className="mt-6 pt-6 border-t border-gray-100">
+                {isAppliedAdminLead ? (
+                  <button 
+                    disabled 
+                    className="w-full py-3.5 px-6 font-bold rounded-xl flex items-center justify-center gap-2 bg-slate-100 text-slate-500 border border-slate-200 cursor-not-allowed text-sm"
+                  >
+                    <CheckCircle2 className="w-4 h-4 text-emerald-600" /> Request Sent • Admin Will Call You
+                  </button>
+                ) : (
+                  <button
+                    onClick={async () => {
+                      if (onSendAdminLeadRequest) {
+                        await onSendAdminLeadRequest(selectedViewUser);
+                        setSelectedViewUser(null);
+                      }
+                    }}
+                    disabled={isSendingAdminRequest}
+                    className="w-full py-3.5 px-6 font-bold rounded-xl flex items-center justify-center gap-2 shadow-lg transition-all bg-indigo-600 hover:bg-indigo-700 text-white shadow-indigo-600/20 text-sm active:scale-95 disabled:opacity-50"
+                  >
+                    {isSendingAdminRequest ? (
+                      <>
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                        <span>Sending Request...</span>
+                      </>
+                    ) : (
+                      <>
+                        <PhoneCall className="w-4 h-4" />
+                        <span>Send Request to Admin</span>
+                      </>
+                    )}
+                  </button>
+                )}
+              </div>
+            );
+          }
+
           const hasNegotiation = data?.applications?.some((app: any) => (app.groupDocId || app.studentDocId) === selectedViewUser.id && ['negotiating'].includes(app.status));
           const isPending = data?.applications?.some((app: any) => (app.groupDocId || app.studentDocId) === selectedViewUser.id && ['demo_requested_by_student', 'demo_requested_by_teacher', 'demo_pending_payment', 'demo_booked', 'pending', 'accepted'].includes(app.status));
           const isHired = data?.applications?.some((app: any) => (app.groupDocId || app.studentDocId) === selectedViewUser.id && ['tuition_started'].includes(app.status));

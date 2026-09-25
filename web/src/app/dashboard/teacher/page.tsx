@@ -17,7 +17,7 @@ import Link from 'next/link';
 
 
 import { motion } from 'motion/react';
-import { Calendar, CalendarDays, CalendarClock, LayoutDashboard, LogOut, User, Users, Gift, Lock, CheckCircle2, AlertTriangle, AlertCircle, MessageCircle, BookOpen, Menu, X, Globe, Star, Bell, Phone, Mail, MapPin, Target, Handshake, ChevronRight, ChevronDown, ArrowRight, CreditCard, IndianRupee, TrendingUp, TrendingDown, Copy, Wallet, GraduationCap, Lightbulb, Loader2, FileText, ShieldCheck, Trash2, Clock, Award, UserCheck, ExternalLink, RefreshCw, Sparkles, Info, Coins } from 'lucide-react';
+import { Calendar, CalendarDays, CalendarClock, LayoutDashboard, LogOut, User, Users, Gift, Lock, CheckCircle2, AlertTriangle, AlertCircle, MessageCircle, BookOpen, Menu, X, Globe, Star, Bell, Phone, PhoneCall, Mail, MapPin, Target, Handshake, ChevronRight, ChevronDown, ArrowRight, CreditCard, IndianRupee, TrendingUp, TrendingDown, Copy, Wallet, GraduationCap, Lightbulb, Loader2, FileText, ShieldCheck, Trash2, Clock, Award, UserCheck, ExternalLink, RefreshCw, Sparkles, Info, Coins } from 'lucide-react';
 import TeacherForm from '@/components/TeacherForm';
 import ActionModal from '@/components/ActionModal';
 import MessageModal from '@/components/MessageModal';
@@ -31,7 +31,8 @@ import { toast } from 'sonner';
 import { executeDeclineOffer } from '@/hooks/useDashboardActions';
 import { useTeacherData } from '@/hooks/useDashboardData';
 import { WhatsAppButton } from '@/components/WhatsAppButton';
-import { auth, functions } from '@/utils/firebase/client';
+import { auth, functions, db } from '@/utils/firebase/client';
+import { collection, query, where, onSnapshot } from 'firebase/firestore';
 import { httpsCallable } from 'firebase/functions';
 import { getStudentDemoFee } from '@/utils/pricing';
 
@@ -105,6 +106,68 @@ export default function TeacherDashboard() {
     const timer = setInterval(() => setNowTime(Date.now()), 10000);
     return () => clearInterval(timer);
   }, []);
+
+  const [appliedAdminLeadGroupIds, setAppliedAdminLeadGroupIds] = useState<Set<string>>(new Set());
+  const [sendingAdminRequestId, setSendingAdminRequestId] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!auth.currentUser?.uid) return;
+    const q = query(
+      collection(db, 'admin_lead_requests'),
+      where('tutorDocId', '==', auth.currentUser.uid)
+    );
+    const unsub = onSnapshot(
+      q,
+      (snap) => {
+        const groupIds = new Set<string>();
+        snap.docs.forEach((d) => {
+          const item = d.data();
+          if (item.groupDocId) groupIds.add(item.groupDocId);
+        });
+        setAppliedAdminLeadGroupIds(groupIds);
+      },
+      (err) => {
+        console.warn('Error listening to admin_lead_requests:', err);
+      }
+    );
+    return () => unsub();
+  }, [auth.currentUser?.uid]);
+
+  const handleSendAdminLeadRequest = async (group: any) => {
+    if (!auth.currentUser) {
+      toast.error("Please sign in to send a request.");
+      return;
+    }
+    const groupId = group.id || group.groupDocId;
+    setSendingAdminRequestId(groupId);
+    try {
+      const { collection, doc, setDoc } = await import('firebase/firestore');
+      const reqRef = doc(collection(db, 'admin_lead_requests'));
+      await setDoc(reqRef, {
+        id: reqRef.id,
+        groupDocId: groupId,
+        groupId: group.groupId || '',
+        tutorDocId: auth.currentUser.uid,
+        tutorId: data?.profile?.tutorId || '',
+        tutorName: data?.profile?.name || auth.currentUser.displayName || 'Teacher',
+        tutorPhone: data?.profile?.phone || '',
+        tutorEmail: data?.profile?.email || auth.currentUser.email || '',
+        tutorRating: data?.profile?.rating || 5.0,
+        tutorSubjects: data?.profile?.subjects || [],
+        tutorExperience: data?.profile?.experience || '',
+        tutorMode: data?.profile?.mode || 'Both',
+        appliedAt: Date.now(),
+        status: 'pending_review'
+      });
+      setAppliedAdminLeadGroupIds((prev) => new Set([...Array.from(prev), groupId]));
+      toast.success("Request sent to Admin! The Mi-Tutora team will call you shortly.");
+    } catch (err: any) {
+      console.error("Error sending admin lead request:", err);
+      toast.error("Failed to send request to admin. Please try again.");
+    } finally {
+      setSendingAdminRequestId(null);
+    }
+  };
   
   // KYC State (PowerAPI integration - temporarily deactivated in Settings UI pending company license)
   const [kycStep, setKycStep] = useState<'input' | 'otp' | 'verified'>('input');
@@ -742,6 +805,9 @@ export default function TeacherDashboard() {
       groupId: sourceApp.groupId || matchedGroup?.groupId || fallback.groupId || primaryStudent.groupId || '',
       parentDocId: sourceApp.parentDocId || matchedGroup?.parentDocId || fallback.parentDocId || primaryStudent.parentDocId || '',
       groupDocId: sourceApp.groupDocId || matchedGroup?.groupDocId || fallback.groupDocId || primaryStudent.groupDocId || fallback.id || '',
+      managedByAdmin: Boolean(sourceApp.managedByAdmin || matchedGroup?.managedByAdmin || fallback.managedByAdmin),
+      adminNotes: sourceApp.adminNotes || matchedGroup?.adminNotes || fallback.adminNotes || '',
+      adminPhone: sourceApp.adminPhone || matchedGroup?.adminPhone || fallback.adminPhone || '',
     };
   };
 
@@ -1702,19 +1768,28 @@ export default function TeacherDashboard() {
                             labelText = 'Offer Received';
                           }
 
+                          const isManagedByAdmin = Boolean(group.managedByAdmin);
+                          const hasAppliedAdminLead = appliedAdminLeadGroupIds.has(group.id);
+                          const isSendingThisAdminRequest = sendingAdminRequestId === group.id;
+
                           return (
-                            <div key={group.id} className="bg-white rounded-3xl shadow-md border border-gray-100 flex flex-col h-full overflow-hidden relative group">
+                            <div key={group.id} className={`bg-white rounded-3xl shadow-md border flex flex-col h-full overflow-hidden relative group ${isManagedByAdmin ? 'border-indigo-200 ring-1 ring-indigo-100 shadow-indigo-100/50' : 'border-gray-100'}`}>
                               {/* Header */}
-                              <div className="bg-[#00a992] p-4 flex items-center justify-between">
+                              <div className={`p-4 flex items-center justify-between ${isManagedByAdmin ? 'bg-gradient-to-r from-indigo-700 via-indigo-800 to-slate-900 text-white' : 'bg-[#00a992] text-white'}`}>
                                 <div className="flex items-center gap-3 flex-1 min-w-0 pr-3">
-                                  {group.rank && (
+                                  {group.rank && !isManagedByAdmin && (
                                     <div className={`w-8 h-8 rounded-full flex items-center justify-center font-black text-sm shadow-md flex-shrink-0 ${group.rank === 1 ? 'bg-yellow-400 text-yellow-900' : group.rank === 2 ? 'bg-gray-200 text-gray-800' : group.rank === 3 ? 'bg-orange-500 text-white' : 'bg-white/20 text-white backdrop-blur-sm'}`}>
                                       #{group.rank}
                                     </div>
                                   )}
                                   <h3 className="text-lg font-bold text-white tracking-tight truncate">{parentName}</h3>
                                 </div>
-                                {labelText ? (
+                                {isManagedByAdmin ? (
+                                  <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-white/20 text-white text-[10px] font-black rounded-full uppercase tracking-wider backdrop-blur-xs border border-white/25">
+                                    <PhoneCall className="w-3 h-3 text-indigo-200" />
+                                    <span>Managed by Admin</span>
+                                  </span>
+                                ) : labelText ? (
                                   <span className={`px-3 py-1 text-[10px] font-black rounded-full border shadow-sm uppercase tracking-wider whitespace-nowrap flex-shrink-0 ${isRed ? 'bg-white/95 text-red-600 border-red-100' : 'bg-white/95 text-teal-700 border-teal-100'}`}>
                                     {labelText}
                                   </span>
@@ -1728,32 +1803,96 @@ export default function TeacherDashboard() {
                               <div className="p-5 flex flex-col flex-grow">
                                 {/* Group Name */}
                                 <div className="flex items-center gap-2 mb-4 text-gray-900">
-                                  <Users className="w-5 h-5 text-[#00a992]" />
+                                  <Users className={`w-5 h-5 ${isManagedByAdmin ? 'text-indigo-600' : 'text-[#00a992]'}`} />
                                   <h4 className="font-bold text-base">Group: {group.name || 'Student'}</h4>
                                 </div>
+
+                                {isManagedByAdmin && (
+                                  <div className="bg-indigo-50/80 border border-indigo-100 rounded-2xl p-3 mb-4 flex items-start gap-2.5">
+                                    <PhoneCall className="w-4 h-4 text-indigo-600 shrink-0 mt-0.5" />
+                                    <p className="text-xs text-indigo-900 font-medium leading-relaxed">
+                                      Direct phone consultation lead. Mi-Tutora admin personally coordinates teacher selection, demo trial, and payments.
+                                    </p>
+                                  </div>
+                                )}
                                 
                                 {/* Details Box */}
-                                <div className="bg-emerald-50/50 rounded-2xl p-4 space-y-3 mb-6">
+                                <div className={`rounded-2xl p-4 space-y-3 mb-6 ${isManagedByAdmin ? 'bg-indigo-50/40 border border-indigo-100/60' : 'bg-emerald-50/50'}`}>
                                   <div className="flex items-center gap-2 text-sm">
-                                    <LayoutDashboard className="w-4 h-4 text-[#00a992]" />
+                                    <LayoutDashboard className={`w-4 h-4 ${isManagedByAdmin ? 'text-indigo-600' : 'text-[#00a992]'}`} />
                                     <span className="text-slate-600 font-bold">Class:</span>
                                     <span className="text-slate-500">{firstStudent.classLevel || '-'}</span>
                                   </div>
                                   <div className="flex items-center gap-2 text-sm">
-                                    <BookOpen className="w-4 h-4 text-[#00a992]" />
+                                    <BookOpen className={`w-4 h-4 ${isManagedByAdmin ? 'text-indigo-600' : 'text-[#00a992]'}`} />
                                     <span className="text-slate-600 font-bold">Sub:</span>
                                     <span className="text-slate-500 truncate">{firstStudent.subjects?.[0] || '-'}</span>
                                   </div>
                                   <div className="flex items-center gap-2 text-sm">
-                                    <Wallet className="w-4 h-4 text-[#00a992]" />
+                                    <Wallet className={`w-4 h-4 ${isManagedByAdmin ? 'text-indigo-600' : 'text-[#00a992]'}`} />
                                     <span className="text-slate-600 font-bold">Budget:</span>
-                                    <span className="text-[#00a992] font-bold">₹{group.budget}/mo</span>
+                                    <span className={`font-bold ${isManagedByAdmin ? 'text-indigo-700' : 'text-[#00a992]'}`}>₹{group.budget}/mo</span>
+                                    {isManagedByAdmin && (
+                                      <span className="text-[10px] text-indigo-500/80 font-semibold">(Fixed)</span>
+                                    )}
                                   </div>
                                 </div>
                                 
                                 {/* Actions Area */}
                                 <div className="mt-auto">
-                                  {!hasProfile ? (
+                                  {isManagedByAdmin ? (
+                                    <div>
+                                      {isStrictlyOffline && mapsUrl && (
+                                        <button
+                                          type="button"
+                                          onClick={(e) => {
+                                            e.stopPropagation();
+                                            window.open(mapsUrl, '_blank', 'noopener,noreferrer');
+                                          }}
+                                          className="w-full mb-3 py-2 px-3 bg-indigo-50/70 hover:bg-indigo-100 text-indigo-900 border border-indigo-200 rounded-full font-bold text-xs flex items-center justify-center gap-1.5 transition-all active:scale-[0.98] shadow-xs"
+                                        >
+                                          <MapPin className="w-3.5 h-3.5 text-indigo-600" />
+                                          <span>View on Google Maps</span>
+                                          <ExternalLink className="w-3 h-3 text-indigo-600 opacity-80" />
+                                        </button>
+                                      )}
+                                      <div className="flex gap-2">
+                                        <button 
+                                          onClick={() => setSelectedViewUser(buildStudentViewUser(group, group))}
+                                          className="flex-1 py-2 sm:py-2.5 text-indigo-700 font-bold text-xs sm:text-sm bg-white border border-indigo-200 rounded-full hover:bg-indigo-50 transition-all active:scale-95 truncate px-2 sm:px-4"
+                                        >
+                                          View
+                                        </button>
+                                        {hasAppliedAdminLead ? (
+                                          <button
+                                            disabled
+                                            className="flex-[2] py-2 sm:py-2.5 font-bold text-xs sm:text-sm rounded-full flex items-center justify-center gap-1.5 bg-slate-100 text-slate-500 border border-slate-200 cursor-not-allowed px-2 sm:px-4 truncate"
+                                          >
+                                            <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+                                            <span className="truncate">Request Sent • Admin Will Call</span>
+                                          </button>
+                                        ) : (
+                                          <button
+                                            onClick={() => handleSendAdminLeadRequest(group)}
+                                            disabled={isSendingThisAdminRequest}
+                                            className="flex-[2] py-2 sm:py-2.5 font-bold text-xs sm:text-sm rounded-full flex items-center justify-center gap-1.5 bg-indigo-600 hover:bg-indigo-700 text-white transition-all active:scale-95 shadow-md shadow-indigo-600/20 px-2 sm:px-4 truncate disabled:opacity-50"
+                                          >
+                                            {isSendingThisAdminRequest ? (
+                                              <>
+                                                <Loader2 className="w-4 h-4 animate-spin shrink-0" />
+                                                <span className="truncate">Sending...</span>
+                                              </>
+                                            ) : (
+                                              <>
+                                                <PhoneCall className="w-4 h-4 shrink-0" />
+                                                <span className="truncate">Send Request to Admin</span>
+                                              </>
+                                            )}
+                                          </button>
+                                        )}
+                                      </div>
+                                    </div>
+                                  ) : !hasProfile ? (
                                     <button 
                                       onClick={() => setActiveTab('profile')}
                                       className="w-full bg-[#00a992] text-white font-bold py-3.5 rounded-full transition-all shadow-md hover:bg-[#00927d] text-sm"
@@ -4057,6 +4196,9 @@ export default function TeacherDashboard() {
         quotaExceeded={tokensUsed >= quotaLimit}
         onUpgradeRequested={() => setActiveTab('subscriptions')}
         offerLoading={offerLoading}
+        isAppliedAdminLead={Boolean(selectedViewUser && appliedAdminLeadGroupIds.has(selectedViewUser.id))}
+        onSendAdminLeadRequest={handleSendAdminLeadRequest}
+        isSendingAdminRequest={Boolean(selectedViewUser && sendingAdminRequestId === selectedViewUser.id)}
       />
       {/* Upgrade to Pro Confirm Modal */}
       <TransactionConfirmModal
