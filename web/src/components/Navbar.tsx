@@ -41,7 +41,6 @@ export function Navbar() {
 
   const navLinks = [
     'Services',
-    'How It Works',
     'Testimonials',
     'FAQ',
   ];
