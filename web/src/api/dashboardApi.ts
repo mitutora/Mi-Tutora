@@ -535,7 +535,10 @@ export const deriveTeacherDashboardState = (baseData: any) => {
         city: groupDoc?.city || student.city || '',
         latitude: groupDoc?.latitude || student.latitude || null,
         longitude: groupDoc?.longitude || student.longitude || null,
-        teacherGenderPreference: groupDoc?.teacherGenderPreference || 'No Preference'
+        teacherGenderPreference: groupDoc?.teacherGenderPreference || 'No Preference',
+        managedByAdmin: Boolean(groupDoc?.managedByAdmin || student.managedByAdmin),
+        adminNotes: groupDoc?.adminNotes || '',
+        adminPhone: groupDoc?.adminPhone || ''
       };
     }
     acc[gId].students.push({
@@ -554,7 +557,10 @@ export const deriveTeacherDashboardState = (baseData: any) => {
     parentId: g.parentId,
     name: g.students.length === 1 ? g.students[0].name : `Group: ${g.students.map((s:any) => s.name).join(', ')}`,
     category: g.categories[0] || 'school',
-    budget: g.totalBudget
+    budget: g.totalBudget,
+    managedByAdmin: Boolean(g.managedByAdmin),
+    adminNotes: g.adminNotes || '',
+    adminPhone: g.adminPhone || ''
   }));
 
   const matchedGroups = availableGroupsRaw.filter((group: any) => {

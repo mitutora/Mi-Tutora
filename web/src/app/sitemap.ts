@@ -1,38 +1,45 @@
 import { MetadataRoute } from 'next';
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const lastModified = new Date('2026-08-14');
-  
+  const baseUrl = 'https://www.mitutora.in';
+  const now = new Date();
+
   return [
     {
-      url: 'https://mitutora.com',
-      lastModified,
+      url: baseUrl,
+      lastModified: now,
       changeFrequency: 'weekly',
-      priority: 1,
+      priority: 1.0,
     },
     {
-      url: 'https://mitutora.com/login',
-      lastModified,
+      url: `${baseUrl}/signup`,
+      lastModified: now,
       changeFrequency: 'monthly',
       priority: 0.8,
     },
     {
-      url: 'https://mitutora.com/signup',
-      lastModified,
+      url: `${baseUrl}/login`,
+      lastModified: now,
       changeFrequency: 'monthly',
-      priority: 0.8,
+      priority: 0.7,
     },
     {
-      url: 'https://mitutora.com/legal/terms',
-      lastModified,
+      url: `${baseUrl}/legal/privacy-policy`,
+      lastModified: now,
       changeFrequency: 'yearly',
-      priority: 0.5,
+      priority: 0.3,
     },
     {
-      url: 'https://mitutora.com/legal/privacy',
-      lastModified,
+      url: `${baseUrl}/legal/terms-and-conditions`,
+      lastModified: now,
       changeFrequency: 'yearly',
-      priority: 0.5,
+      priority: 0.3,
+    },
+    {
+      url: `${baseUrl}/legal/refund-policy`,
+      lastModified: now,
+      changeFrequency: 'yearly',
+      priority: 0.3,
     },
   ];
 }

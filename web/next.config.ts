@@ -11,6 +11,21 @@ const nextConfig: NextConfig = {
     ],
   },
   serverExternalPackages: ['firebase-admin'],
+  async redirects() {
+    return [
+      {
+        source: '/:path*',
+        has: [
+          {
+            type: 'host',
+            value: 'mitutora.in',
+          },
+        ],
+        destination: 'https://www.mitutora.in/:path*',
+        permanent: true,
+      },
+    ];
+  },
 };
 
 export default nextConfig;

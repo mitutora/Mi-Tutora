@@ -10,6 +10,8 @@ import Link from "next/link";
 
 const titles: Record<string, string> = {
   "/": "Overview & Operational Metrics",
+  "/users": "User Directory & Management",
+  "/manual-leads": "Manual Phone Inquiries & Group Management",
   "/demos": "Demo Phase Management",
   "/tuitions": "Active Hired Tuitions",
   "/cancellations": "Teacher Removal & Cancellation Requests",

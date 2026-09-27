@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "../styles/index.css";
 
@@ -12,17 +12,48 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+export const viewport: Viewport = {
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#063831" },
+    { media: "(prefers-color-scheme: dark)", color: "#04241f" },
+  ],
+  width: "device-width",
+  initialScale: 1,
+};
+
 export const metadata: Metadata = {
-  metadataBase: new URL('https://mitutora.com'),
+  metadataBase: new URL("https://www.mitutora.in"),
+  alternates: {
+    canonical: "https://www.mitutora.in",
+    languages: {
+      "en-IN": "https://www.mitutora.in",
+    },
+  },
   title: {
-    default: "MiTutora - Transforming Education in India",
+    default: "MiTutora | Find Verified Home & Online Tutors in India",
     template: "%s | MiTutora",
   },
-  description: "India's fastest-growing platform connecting students with highly qualified, background-verified tutors for offline and online classes.",
-  keywords: ["online tutoring India", "home tuition", "private tutors", "verified educators", "online classes", "CBSE", "ICSE", "State Board", "NEET", "JEE"],
-  authors: [{ name: "MiTutora" }],
+  description:
+    "Book verified 1-on-1 home and online tutors across India for CBSE, ICSE, State Boards, NEET, JEE, Coding & Languages. 100% background-verified educators.",
+  keywords: [
+    "home tutors near me",
+    "private tutors India",
+    "online tuition India",
+    "CBSE home tutor",
+    "ICSE private tutor",
+    "NEET biology coaching",
+    "JEE physics tutor",
+    "home tuition Bengaluru",
+    "home tutors Delhi NCR",
+    "home tutors Mumbai",
+    "online coding classes for kids",
+    "verified tutors India",
+    "MiTutora",
+  ],
+  authors: [{ name: "MiTutora", url: "https://www.mitutora.in" }],
   creator: "MiTutora",
   publisher: "MiTutora",
+  category: "education",
   formatDetection: {
     email: false,
     address: false,
@@ -30,23 +61,24 @@ export const metadata: Metadata = {
   },
   icons: {
     icon: [
-      { url: '/favicon.ico', sizes: 'any' },
-      { url: '/icon.png', type: 'image/png', sizes: '512x512' },
+      { url: "/favicon.ico", sizes: "any" },
+      { url: "/icon.png", type: "image/png", sizes: "512x512" },
     ],
-    shortcut: '/favicon.ico',
-    apple: '/apple-icon.png',
+    shortcut: "/favicon.ico",
+    apple: "/apple-icon.png",
   },
   openGraph: {
-    title: "MiTutora - Transforming Education in India",
-    description: "Connect with highly qualified tutors for offline and online classes.",
-    url: "https://mitutora.com",
+    title: "MiTutora | Find Verified Home & Online Tutors in India",
+    description:
+      "Connect with background-verified tutors for 1-on-1 home tuition and interactive online classes across India.",
+    url: "https://www.mitutora.in",
     siteName: "MiTutora",
     images: [
       {
-        url: "/logo.png",
-        width: 800,
-        height: 600,
-        alt: "MiTutora Logo",
+        url: "/imports/logo.png",
+        width: 1200,
+        height: 630,
+        alt: "MiTutora - Home and Online Tutors in India",
       },
     ],
     locale: "en_IN",
@@ -54,9 +86,10 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "MiTutora - Transforming Education",
-    description: "India's fastest-growing platform connecting students with top tutors.",
-    images: ["/logo.png"],
+    title: "MiTutora | Find Verified Home & Online Tutors in India",
+    description:
+      "Connect with background-verified tutors for 1-on-1 home tuition and interactive online classes across India.",
+    images: ["/imports/logo.png"],
   },
   robots: {
     index: true,
@@ -64,10 +97,13 @@ export const metadata: Metadata = {
     googleBot: {
       index: true,
       follow: true,
-      'max-video-preview': -1,
-      'max-image-preview': 'large',
-      'max-snippet': -1,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
     },
+  },
+  verification: {
+    google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION || "",
   },
 };
 
@@ -82,17 +118,60 @@ export default function RootLayout({
 }>) {
   const jsonLd = {
     "@context": "https://schema.org",
-    "@type": "EducationalOrganization",
-    "name": "MiTutora",
-    "url": "https://mitutora.com",
-    "logo": "https://mitutora.com/imports/logo.png",
-    "contactPoint": {
-      "@type": "ContactPoint",
-      "telephone": "+91-7483034168",
-      "contactType": "customer service",
-      "areaServed": "IN",
-      "availableLanguage": ["English", "Hindi"]
-    }
+    "@graph": [
+      {
+        "@type": "EducationalOrganization",
+        "@id": "https://www.mitutora.in/#organization",
+        name: "MiTutora",
+        url: "https://www.mitutora.in",
+        logo: "https://www.mitutora.in/imports/logo.png",
+        description:
+          "India's leading platform connecting students with background-verified private and online tutors.",
+        address: {
+          "@type": "PostalAddress",
+          addressCountry: "IN",
+        },
+        contactPoint: {
+          "@type": "ContactPoint",
+          telephone: "+91-7483034168",
+          email: "mitutoraeducation@gmail.com",
+          contactType: "customer service",
+          areaServed: "IN",
+          availableLanguage: ["English", "Hindi"],
+        },
+      },
+      {
+        "@type": "WebSite",
+        "@id": "https://www.mitutora.in/#website",
+        url: "https://www.mitutora.in",
+        name: "MiTutora",
+        publisher: {
+          "@id": "https://www.mitutora.in/#organization",
+        },
+        potentialAction: {
+          "@type": "SearchAction",
+          target: "https://www.mitutora.in/?q={search_term_string}",
+          "query-input": "required name=search_term_string",
+        },
+      },
+      {
+        "@type": "Service",
+        "@id": "https://www.mitutora.in/#service",
+        name: "Home & Online Private Tutoring Services",
+        serviceType: "Private Tutoring",
+        provider: {
+          "@id": "https://www.mitutora.in/#organization",
+        },
+        areaServed: {
+          "@type": "Country",
+          name: "India",
+        },
+        offers: {
+          "@type": "Offer",
+          priceCurrency: "INR",
+        },
+      },
+    ],
   };
 
   return (
