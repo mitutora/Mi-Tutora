@@ -1,4 +1,4 @@
-# Mi-Tutora — Platform Business & Technical Architecture
+# Mi-Tutora — Platform Business & Technical Architecture.
 
 Welcome to the **Mi-Tutora** codebase. Mi-Tutora is an advanced ed-tech marketplace connecting **Students/Parents** with verified **Home & Online Tutors** across School Academics, Competitive Exams, Programming, and Spoken Languages.
 
