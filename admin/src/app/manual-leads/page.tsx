@@ -677,7 +677,9 @@ export default function ManualLeadsPage() {
           };
           
           const groupBudget = groupStudents.reduce((acc: number, curr: any) => acc + (Number(curr.budget) || 0), 0);
-          const isOffline = pref.mode === "Offline";
+          const groupHasProgramming = groupStudents.some(s => s.category === "programming");
+          const finalMode = groupHasProgramming ? "Online" : (pref.mode || "Offline");
+          const isOffline = finalMode === "Offline";
           const groupArea = isOffline ? (pref.addressStreet || "") : "";
           const groupCity = isOffline ? (pref.city || "Bengaluru") : "";
 
@@ -737,7 +739,8 @@ export default function ManualLeadsPage() {
             parentDocId: parentDocId,
             studentDocIds: studentDocIds,
             name: groupName,
-            mode: pref.mode,
+            category: groupStudents[0]?.category || "school",
+            mode: finalMode,
             area: groupArea,
             city: groupCity,
             addressFlat: isOffline ? (pref.addressFlat || "") : "",
@@ -762,10 +765,11 @@ export default function ManualLeadsPage() {
             requestId: requestCustomId,
             groupDocId: groupRef.id,
             parentDocId: parentDocId,
+            category: groupStudents[0]?.category || "school",
             studentsDetails: studentsDetailsList,
             combinedSubjects: Array.from(allSubjectsSet),
             combinedBudget: groupBudget,
-            mode: pref.mode,
+            mode: finalMode,
             area: groupArea,
             city: groupCity,
             managedByAdmin: true,
@@ -871,7 +875,9 @@ export default function ManualLeadsPage() {
             : `Group: ${studentsList.map((s) => s.name.trim()).join(", ")}`;
 
         const finalBudget = studentsList.reduce((acc, curr) => acc + (Number(curr.budget) || 0), 0);
-        const isOffline = pref.mode === "Offline";
+        const groupHasProgramming = studentsList.some(s => s.category === "programming");
+        const finalMode = groupHasProgramming ? "Online" : (pref.mode || "Offline");
+        const isOffline = finalMode === "Offline";
         const groupArea = isOffline ? (pref.addressStreet || "") : "";
         const groupCity = isOffline ? (pref.city || "Bengaluru") : "";
 
@@ -881,7 +887,8 @@ export default function ManualLeadsPage() {
           parentDocId: parentDocId,
           studentDocIds: studentDocIds,
           name: groupName,
-          mode: pref.mode,
+          category: studentsList[0]?.category || "school",
+          mode: finalMode,
           area: groupArea,
           city: groupCity,
           addressFlat: isOffline ? (pref.addressFlat || "") : "",
@@ -907,10 +914,11 @@ export default function ManualLeadsPage() {
           requestId: generateCustomId("REQ"),
           groupDocId: groupDocId,
           parentDocId: parentDocId,
+          category: studentsList[0]?.category || "school",
           studentsDetails: studentsDetailsList,
           combinedSubjects: Array.from(allSubjectsSet),
           combinedBudget: finalBudget,
-          mode: pref.mode,
+          mode: finalMode,
           area: groupArea,
           city: groupCity,
           managedByAdmin: true,
