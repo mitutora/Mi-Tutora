@@ -49,7 +49,7 @@ export default function GroupManager({ students, onSave, onCancel, isModal = fal
     });
 
     if (Object.keys(initialGroups).length === 1 && initialGroups['unassigned'].length > 0) {
-      const { db } = await import('@/utils/firebase/client');
+      const { db } = await import('@/lib/firebase');
       const { collection, doc } = await import('firebase/firestore');
       const defaultGroupId = doc(collection(db, 'groups')).id;
       initialGroups[defaultGroupId] = [];
@@ -109,7 +109,7 @@ export default function GroupManager({ students, onSave, onCancel, isModal = fal
   };
 
   const addGroup = async () => {
-    const { db } = await import('@/utils/firebase/client');
+    const { db } = await import('@/lib/firebase');
     const { collection, doc } = await import('firebase/firestore');
     const newGroupId = doc(collection(db, 'groups')).id;
     setGroups({ ...groups, [newGroupId]: [] });
