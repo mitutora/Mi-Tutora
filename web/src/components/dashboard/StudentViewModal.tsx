@@ -107,11 +107,7 @@ export function StudentViewModal({
           <X className="w-5 h-5" />
         </button>
         
-<<<<<<< HEAD
-        <div className={`p-5 sm:p-8 md:p-10 text-white flex-shrink-0 relative overflow-hidden ${isManagedByAdmin ? 'bg-gradient-to-r from-indigo-700 via-indigo-800 to-slate-900' : 'bg-[#00a992]'}`}>
-=======
         <div className={`p-5 sm:p-8 md:p-10 text-white flex-shrink-0 relative overflow-hidden ${isManagedByAdmin ? 'bg-gradient-to-r from-[#00a992] via-emerald-700 to-teal-900' : 'bg-[#00a992]'}`}>
->>>>>>> origin/development-
           <div className="relative z-10 flex items-start gap-4 sm:gap-6">
             <div className="w-14 h-14 sm:w-20 sm:h-20 bg-white/20 rounded-2xl flex items-center justify-center text-2xl sm:text-4xl font-black backdrop-blur-md shadow-inner border border-white/30 flex-shrink-0">
               {((selectedViewUser.students?.[0]?.guardianName || selectedViewUser.students?.[0]?.parentName || selectedViewUser.guardianName || selectedViewUser.parentName || selectedViewUser.name)?.charAt(0) || 'S')}
@@ -121,11 +117,7 @@ export function StudentViewModal({
               <div className="flex gap-2 mt-1.5 flex-wrap items-center">
                 {isManagedByAdmin && (
                   <span className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-white/20 text-white font-bold uppercase tracking-wider text-xs rounded-md border border-white/30 shadow-sm backdrop-blur-xs">
-<<<<<<< HEAD
-                    <PhoneCall className="w-3 h-3 text-indigo-200" />
-=======
                     <PhoneCall className="w-3 h-3 text-emerald-200" />
->>>>>>> origin/development-
                     <span>Managed by Admin</span>
                   </span>
                 )}
@@ -160,21 +152,6 @@ export function StudentViewModal({
           <div className="space-y-8">
             {/* Admin Lead Notice or Contact Information Block */}
             {isManagedByAdmin ? (
-<<<<<<< HEAD
-              <div className="bg-indigo-50/90 rounded-2xl p-5 border border-indigo-200 space-y-2">
-                <div className="flex items-center gap-2">
-                  <PhoneCall className="w-4 h-4 text-indigo-600" />
-                  <h4 className="text-xs font-black uppercase tracking-wider text-indigo-900">
-                    Mi-Tutora Admin Phone Consultation Lead
-                  </h4>
-                </div>
-                <p className="text-xs text-indigo-800 font-medium leading-relaxed">
-                  This tuition request is managed directly by Mi-Tutora Admin. Trial demo sessions, schedule adjustments, and tuition payments are coordinated offline via phone/WhatsApp consultation.
-                </p>
-                {selectedViewUser.adminNotes && (
-                  <div className="bg-white/80 p-3 rounded-xl border border-indigo-100 text-xs text-indigo-950 font-medium italic mt-2">
-                    <span className="font-bold not-italic text-indigo-800">Admin Notes: </span>
-=======
               <div className="bg-emerald-50/90 rounded-2xl p-5 border border-emerald-200 space-y-2">
                 <div className="flex items-center gap-2">
                   <PhoneCall className="w-4 h-4 text-[#00a992]" />
@@ -194,7 +171,6 @@ export function StudentViewModal({
                 {selectedViewUser.adminNotes && (
                   <div className="bg-white/80 p-3 rounded-xl border border-emerald-100 text-xs text-emerald-950 font-medium italic mt-2">
                     <span className="font-bold not-italic text-emerald-800">Admin Notes: </span>
->>>>>>> origin/development-
                     {selectedViewUser.adminNotes}
                   </div>
                 )}
@@ -460,11 +436,7 @@ export function StudentViewModal({
                       }
                     }}
                     disabled={isSendingAdminRequest}
-<<<<<<< HEAD
-                    className="w-full py-3.5 px-6 font-bold rounded-xl flex items-center justify-center gap-2 shadow-lg transition-all bg-indigo-600 hover:bg-indigo-700 text-white shadow-indigo-600/20 text-sm active:scale-95 disabled:opacity-50"
-=======
                     className="w-full py-3.5 px-6 font-bold rounded-xl flex items-center justify-center gap-2 shadow-lg transition-all bg-[#00a992] hover:bg-[#008f7b] text-white shadow-[#00a992]/20 text-sm active:scale-95 disabled:opacity-50"
->>>>>>> origin/development-
                   >
                     {isSendingAdminRequest ? (
                       <>

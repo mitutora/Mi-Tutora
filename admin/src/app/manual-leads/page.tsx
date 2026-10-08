@@ -27,23 +27,17 @@ import {
   Loader2,
   AlertCircle,
   Calendar,
-<<<<<<< HEAD
-=======
   CalendarDays,
->>>>>>> origin/development-
   MapPin,
   IndianRupee,
   BookOpen,
   GraduationCap,
-<<<<<<< HEAD
-=======
   Building,
   Award,
   Laptop,
   Languages,
   Mail,
   Globe,
->>>>>>> origin/development-
   Star,
   Eye,
   Check,
@@ -53,11 +47,8 @@ import {
   UserCheck
 } from "lucide-react";
 import { formatWhatsAppUrl, formatTelUrl } from "@/lib/contactResolver";
-<<<<<<< HEAD
-=======
 import GroupManager from "@/components/GroupManager";
 import { getSubjectsForStudent, isSeniorSecondary } from "@/utils/subjects";
->>>>>>> origin/development-
 
 function generateCustomId(prefix: string): string {
   const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
@@ -80,14 +71,6 @@ interface StudentFormItem {
   id?: string;
   studentId?: string;
   name: string;
-<<<<<<< HEAD
-  gender: "Male" | "Female" | "Other";
-  category: "school" | "competitive" | "programming" | "languages";
-  classLevel: string;
-  board: string;
-  subjectsStr: string;
-  budget: number;
-=======
   gender: "Female" | "Male" | "Other";
   category: "school" | "programming" | "languages";
   budget: number;
@@ -99,7 +82,6 @@ interface StudentFormItem {
   technologies?: string[];
   languages?: string[];
   groupDocId?: string;
->>>>>>> origin/development-
 }
 
 interface GroupLeadItem {
@@ -192,10 +174,7 @@ export default function ManualLeadsPage() {
 
   // Form Fields
   const [parentName, setParentName] = useState("");
-<<<<<<< HEAD
-=======
   const [parentEmail, setParentEmail] = useState("");
->>>>>>> origin/development-
   const [parentPhone, setParentPhone] = useState("");
   const [parentWhatsapp, setParentWhatsapp] = useState("");
   const [sameAsPhone, setSameAsPhone] = useState(true);
@@ -203,23 +182,6 @@ export default function ManualLeadsPage() {
   const [area, setArea] = useState("");
   const [adminNotes, setAdminNotes] = useState("");
 
-<<<<<<< HEAD
-  // Students list in form
-  const [studentsList, setStudentsList] = useState<StudentFormItem[]>([
-    {
-      name: "",
-      gender: "Male",
-      category: "school",
-      classLevel: "Class 10",
-      board: "CBSE",
-      subjectsStr: "Mathematics, Science",
-      budget: 5000,
-    },
-  ]);
-
-  // Group Preferences
-  const [groupingStrategy, setGroupingStrategy] = useState<"combined" | "separate">("combined");
-=======
   // Number of Students selector (1 to 5)
   const [numberOfStudents, setNumberOfStudents] = useState<number>(1);
   const [isGroupsSaved, setIsGroupsSaved] = useState<boolean>(true);
@@ -247,7 +209,6 @@ export default function ManualLeadsPage() {
   
   // Strategy step
   const [groupingStrategy, setGroupingStrategy] = useState<"combined" | "separate" | "custom">("custom");
->>>>>>> origin/development-
   const [deliveryMode, setDeliveryMode] = useState<"Offline" | "Online">("Offline");
   const [daysPerWeek, setDaysPerWeek] = useState("5 Days/Week");
   const [specificDays, setSpecificDays] = useState<string[]>([
@@ -434,41 +395,20 @@ export default function ManualLeadsPage() {
 
   // Sum of student budgets
   const calculatedTotalBudget = useMemo(() => {
-<<<<<<< HEAD
-    return studentsList.reduce((acc, curr) => acc + (Number(curr.budget) || 0), 0);
-=======
     return studentsList.reduce((acc: number, curr: any) => acc + (Number(curr.budget) || 0), 0);
->>>>>>> origin/development-
   }, [studentsList]);
 
   // Open modal for new lead
   const handleOpenNewModal = () => {
     setEditingGroupId(null);
     setParentName("");
-<<<<<<< HEAD
-=======
     setParentEmail("");
->>>>>>> origin/development-
     setParentPhone("");
     setParentWhatsapp("");
     setSameAsPhone(true);
     setCity("Bengaluru");
     setArea("");
     setAdminNotes("");
-<<<<<<< HEAD
-    setStudentsList([
-      {
-        name: "",
-        gender: "Male",
-        category: "school",
-        classLevel: "Class 10",
-        board: "CBSE",
-        subjectsStr: "Mathematics, Science",
-        budget: 5000,
-      },
-    ]);
-    setGroupingStrategy("combined");
-=======
     setNumberOfStudents(1);
     setIsGroupsSaved(true);
     setStudentsList([
@@ -489,7 +429,6 @@ export default function ManualLeadsPage() {
     ]);
     setGroupPreferences({});
     setGroupingStrategy("custom");
->>>>>>> origin/development-
     setDeliveryMode("Offline");
     setDaysPerWeek("5 Days/Week");
     setSpecificDays(["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"]);
@@ -504,10 +443,7 @@ export default function ManualLeadsPage() {
   const handleOpenEditModal = (group: GroupLeadItem) => {
     setEditingGroupId(group.id);
     setParentName(group.parent?.name || "");
-<<<<<<< HEAD
-=======
     setParentEmail((group.parent as any)?.email || "");
->>>>>>> origin/development-
     setParentPhone(group.parent?.phone || "");
     setParentWhatsapp(group.parent?.whatsapp || group.parent?.phone || "");
     setSameAsPhone(
@@ -517,13 +453,10 @@ export default function ManualLeadsPage() {
     setArea(group.area || "");
     setAdminNotes(group.adminNotes || "");
 
-<<<<<<< HEAD
-=======
     const studentCount = group.students && group.students.length > 0 ? group.students.length : 1;
     setNumberOfStudents(studentCount);
     setIsGroupsSaved(true);
 
->>>>>>> origin/development-
     if (group.students && group.students.length > 0) {
       setStudentsList(
         group.students.map((s) => ({
@@ -532,12 +465,6 @@ export default function ManualLeadsPage() {
           name: s.name,
           gender: (s.gender as any) || "Male",
           category: (s.category as any) || "school",
-<<<<<<< HEAD
-          classLevel: s.classLevel || "Class 10",
-          board: s.board || "CBSE",
-          subjectsStr: (s.subjects || []).join(", "),
-          budget: s.budget || 5000,
-=======
           studentType: (s as any).studentType || "School Student",
           classLevel: s.classLevel || "",
           board: s.board || "CBSE",
@@ -547,21 +474,11 @@ export default function ManualLeadsPage() {
           stream: (s as any).stream || "",
           budget: s.budget || 5000,
           groupDocId: group.id,
->>>>>>> origin/development-
         }))
       );
     } else {
       setStudentsList([
         {
-<<<<<<< HEAD
-          name: group.name.replace("Group: ", ""),
-          gender: "Male",
-          category: "school",
-          classLevel: "Class 10",
-          board: "CBSE",
-          subjectsStr: "All Subjects",
-          budget: group.totalBudget || 5000,
-=======
           id: `new_${Date.now()}`,
           name: group.name.replace("Group: ", ""),
           gender: "Male",
@@ -574,14 +491,10 @@ export default function ManualLeadsPage() {
           languages: [],
           budget: group.totalBudget || 5000,
           groupDocId: group.id,
->>>>>>> origin/development-
         },
       ]);
     }
 
-<<<<<<< HEAD
-    setGroupingStrategy("combined");
-=======
     setGroupPreferences({
       [group.id]: {
         mode: (group.mode as any) || "Offline",
@@ -597,7 +510,6 @@ export default function ManualLeadsPage() {
     });
 
     setGroupingStrategy("custom");
->>>>>>> origin/development-
     setDeliveryMode((group.mode as any) || "Offline");
     setDaysPerWeek(group.daysPerWeek || "5 Days/Week");
     setSpecificDays(group.specificDays || ["Monday", "Wednesday", "Friday"]);
@@ -608,27 +520,6 @@ export default function ManualLeadsPage() {
     setIsModalOpen(true);
   };
 
-<<<<<<< HEAD
-  // Dynamic student list actions
-  const handleAddStudent = () => {
-    setStudentsList((prev) => [
-      ...prev,
-      {
-        name: "",
-        gender: "Female",
-        category: "school",
-        classLevel: "Class 8",
-        board: "CBSE",
-        subjectsStr: "Mathematics",
-        budget: 4000,
-      },
-    ]);
-  };
-
-  const handleRemoveStudent = (index: number) => {
-    if (studentsList.length <= 1) return;
-    setStudentsList((prev) => prev.filter((_, i) => i !== index));
-=======
   // Changing number of students via dropdown
   const handleNumberOfStudentsChange = (count: number) => {
     setNumberOfStudents(count);
@@ -658,7 +549,6 @@ export default function ManualLeadsPage() {
       }
       return prev;
     });
->>>>>>> origin/development-
   };
 
   const handleUpdateStudent = (index: number, field: keyof StudentFormItem, val: any) => {
@@ -688,13 +578,6 @@ export default function ManualLeadsPage() {
       setFormError("Please enter a valid 10-digit primary phone number.");
       return;
     }
-<<<<<<< HEAD
-    if (!area.trim()) {
-      setFormError("Locality / neighborhood area is required.");
-      return;
-    }
-=======
->>>>>>> origin/development-
 
     // Validate Students
     for (let i = 0; i < studentsList.length; i++) {
@@ -703,10 +586,6 @@ export default function ManualLeadsPage() {
         setFormError(`Student #${i + 1} name is required.`);
         return;
       }
-<<<<<<< HEAD
-      if (!s.subjectsStr.trim()) {
-        setFormError(`Subjects for Student #${i + 1} are required.`);
-=======
       if (s.category === "school" && (!s.subjects || s.subjects.length === 0)) {
         setFormError(`Please select at least one subject for Student #${i + 1}.`);
         return;
@@ -717,7 +596,6 @@ export default function ManualLeadsPage() {
       }
       if (s.category === "languages" && (!s.languages || s.languages.length === 0)) {
         setFormError(`Please select at least one language for Student #${i + 1}.`);
->>>>>>> origin/development-
         return;
       }
       if (!s.budget || s.budget <= 0) {
@@ -726,25 +604,15 @@ export default function ManualLeadsPage() {
       }
     }
 
-<<<<<<< HEAD
-=======
     if (studentsList.length > 1 && !isGroupsSaved && !editingGroupId) {
       setFormError("Please organize your students into groups and click 'Save Groups' before publishing.");
       return;
     }
 
->>>>>>> origin/development-
     setSaving(true);
     try {
       const batch = writeBatch(db);
       const now = Date.now();
-<<<<<<< HEAD
-      const finalBudget =
-        typeof customTotalBudget === "number" && customTotalBudget > 0
-          ? customTotalBudget
-          : calculatedTotalBudget;
-=======
->>>>>>> origin/development-
 
       // 1. Parent Entity
       let parentDocId = "";
@@ -765,16 +633,9 @@ export default function ManualLeadsPage() {
         parentId: parentCustomId,
         parentDocId: parentDocId,
         name: parentName.trim(),
-<<<<<<< HEAD
-        phone: cleanPhone,
-        whatsapp: sameAsPhone ? cleanPhone : parentWhatsapp.replace(/\D/g, "") || cleanPhone,
-        city: city.trim(),
-        area: area.trim(),
-=======
         email: parentEmail.trim(),
         phone: cleanPhone,
         whatsapp: sameAsPhone ? cleanPhone : parentWhatsapp.replace(/\D/g, "") || cleanPhone,
->>>>>>> origin/development-
         managedByAdmin: true,
         source: "manual_call",
         createdAt: now,
@@ -783,40 +644,6 @@ export default function ManualLeadsPage() {
       batch.set(doc(db, "parents", parentDocId), parentData, { merge: true });
 
       // 2. Student & Group Creation Logic
-<<<<<<< HEAD
-      if (studentsList.length > 1 && groupingStrategy === "separate" && !editingGroupId) {
-        // Create individual group per student
-        for (const s of studentsList) {
-          const studentRef = doc(collection(db, "students"));
-          const groupRef = doc(collection(db, "groups"));
-          const requestRef = doc(collection(db, "tuition_requests"), groupRef.id);
-
-          const studentCustomId = generateCustomId("MTS");
-          const groupCustomId = generateCustomId("MTG");
-          const requestCustomId = generateCustomId("REQ");
-
-          const parsedSubjects = s.subjectsStr
-            .split(",")
-            .map((sub) => sub.trim())
-            .filter(Boolean);
-
-          const studentData = {
-            id: studentRef.id,
-            studentId: studentCustomId,
-            parentDocId: parentDocId,
-            groupDocId: groupRef.id,
-            name: s.name.trim(),
-            gender: s.gender,
-            category: s.category,
-            classLevel: s.classLevel.trim(),
-            board: s.board.trim(),
-            subjects: parsedSubjects,
-            budget: Number(s.budget),
-            isAvailable: true,
-            managedByAdmin: true,
-            createdAt: now,
-          };
-=======
       if (studentsList.length > 1 && groupingStrategy === "custom" && !editingGroupId) {
         // Create custom groups based on GroupManager
         const groupedStudents = new Map<string, StudentFormItem[]>();
@@ -905,24 +732,11 @@ export default function ManualLeadsPage() {
             groupStudents.length === 1
               ? groupStudents[0].name.trim()
               : `Group: ${groupStudents.map((s: any) => s.name.trim()).join(", ")}`;
->>>>>>> origin/development-
 
           const groupData = {
             id: groupRef.id,
             groupId: groupCustomId,
             parentDocId: parentDocId,
-<<<<<<< HEAD
-            studentDocIds: [studentRef.id],
-            name: s.name.trim(),
-            mode: deliveryMode,
-            area: area.trim(),
-            city: city.trim(),
-            daysPerWeek: daysPerWeek,
-            specificDays: specificDays,
-            preferredTimeRange: preferredTimeRange,
-            teacherGenderPreference: teacherGenderPreference,
-            totalBudget: Number(s.budget),
-=======
             studentDocIds: studentDocIds,
             name: groupName,
             category: groupStudents[0]?.category || "school",
@@ -937,7 +751,6 @@ export default function ManualLeadsPage() {
             preferredTimeRange: pref.preferredTimeRange,
             teacherGenderPreference: pref.teacherGenderPreference,
             totalBudget: groupBudget,
->>>>>>> origin/development-
             status: "active",
             managedByAdmin: true,
             source: "manual_call",
@@ -952,20 +765,6 @@ export default function ManualLeadsPage() {
             requestId: requestCustomId,
             groupDocId: groupRef.id,
             parentDocId: parentDocId,
-<<<<<<< HEAD
-            studentsDetails: [
-              {
-                studentId: studentCustomId,
-                name: s.name.trim(),
-                classLevel: s.classLevel.trim(),
-                board: s.board.trim(),
-                subjects: parsedSubjects,
-                budget: Number(s.budget),
-              },
-            ],
-            combinedSubjects: parsedSubjects,
-            combinedBudget: Number(s.budget),
-=======
             category: groupStudents[0]?.category || "school",
             studentsDetails: studentsDetailsList,
             combinedSubjects: Array.from(allSubjectsSet),
@@ -973,29 +772,15 @@ export default function ManualLeadsPage() {
             mode: finalMode,
             area: groupArea,
             city: groupCity,
->>>>>>> origin/development-
             managedByAdmin: true,
             status: "open",
             createdAt: now,
           };
 
-<<<<<<< HEAD
-          batch.set(studentRef, studentData);
-=======
->>>>>>> origin/development-
           batch.set(groupRef, groupData);
           batch.set(requestRef, requestData);
         }
       } else {
-<<<<<<< HEAD
-        // Combined Joint Group (or single student)
-        let groupDocId = "";
-        let groupCustomId = "";
-
-        if (editingGroupId) {
-          groupDocId = editingGroupId;
-          const existingGroup = groups.find((g) => g.id === editingGroupId);
-=======
         // Combined Joint Group (or single student, or editing existing)
         let groupDocId = "";
         let groupCustomId = "";
@@ -1016,7 +801,6 @@ export default function ManualLeadsPage() {
         if (editingGroupId) {
           groupDocId = editingGroupId;
           const existingGroup = groups.find((g: any) => g.id === editingGroupId);
->>>>>>> origin/development-
           groupCustomId = existingGroup?.groupId || generateCustomId("MTG");
         } else {
           const groupRef = doc(collection(db, "groups"));
@@ -1029,16 +813,6 @@ export default function ManualLeadsPage() {
         const allSubjectsSet = new Set<string>();
 
         for (const s of studentsList) {
-<<<<<<< HEAD
-          const sRef = s.id ? doc(db, "students", s.id) : doc(collection(db, "students"));
-          const sCustomId = s.studentId || generateCustomId("MTS");
-          const parsedSubjects = s.subjectsStr
-            .split(",")
-            .map((sub) => sub.trim())
-            .filter(Boolean);
-
-          parsedSubjects.forEach((sub) => allSubjectsSet.add(sub));
-=======
           const sRef = (s.id && !s.id.startsWith("new_")) ? doc(db, "students", s.id) : doc(collection(db, "students"));
           const sCustomId = s.studentId || generateCustomId("MTS");
           const parsedSubjects = s.category === "programming"
@@ -1048,7 +822,6 @@ export default function ManualLeadsPage() {
             : (s.subjects || []);
 
           parsedSubjects.forEach((sub: string) => allSubjectsSet.add(sub));
->>>>>>> origin/development-
           studentDocIds.push(sRef.id);
 
           const studentData = {
@@ -1059,11 +832,6 @@ export default function ManualLeadsPage() {
             name: s.name.trim(),
             gender: s.gender,
             category: s.category,
-<<<<<<< HEAD
-            classLevel: s.classLevel.trim(),
-            board: s.board.trim(),
-            subjects: parsedSubjects,
-=======
             studentType: s.studentType || "School Student",
             classLevel: (s.classLevel || "").trim(),
             board: (s.board || "").trim(),
@@ -1071,7 +839,6 @@ export default function ManualLeadsPage() {
             subjects: parsedSubjects,
             technologies: s.technologies || [],
             languages: s.languages || [],
->>>>>>> origin/development-
             budget: Number(s.budget),
             isAvailable: true,
             managedByAdmin: true,
@@ -1090,8 +857,6 @@ export default function ManualLeadsPage() {
           batch.set(sRef, studentData, { merge: true });
         }
 
-<<<<<<< HEAD
-=======
         if (editingGroupId) {
           const existingGroup = groups.find((g: any) => g.id === editingGroupId);
           if (existingGroup && existingGroup.studentDocIds) {
@@ -1104,14 +869,11 @@ export default function ManualLeadsPage() {
           }
         }
 
->>>>>>> origin/development-
         const groupName =
           studentsList.length === 1
             ? studentsList[0].name.trim()
             : `Group: ${studentsList.map((s) => s.name.trim()).join(", ")}`;
 
-<<<<<<< HEAD
-=======
         const finalBudget = studentsList.reduce((acc, curr) => acc + (Number(curr.budget) || 0), 0);
         const groupHasProgramming = studentsList.some(s => s.category === "programming");
         const finalMode = groupHasProgramming ? "Online" : (pref.mode || "Offline");
@@ -1119,22 +881,12 @@ export default function ManualLeadsPage() {
         const groupArea = isOffline ? (pref.addressStreet || "") : "";
         const groupCity = isOffline ? (pref.city || "Bengaluru") : "";
 
->>>>>>> origin/development-
         const groupData = {
           id: groupDocId,
           groupId: groupCustomId,
           parentDocId: parentDocId,
           studentDocIds: studentDocIds,
           name: groupName,
-<<<<<<< HEAD
-          mode: deliveryMode,
-          area: area.trim(),
-          city: city.trim(),
-          daysPerWeek: daysPerWeek,
-          specificDays: specificDays,
-          preferredTimeRange: preferredTimeRange,
-          teacherGenderPreference: teacherGenderPreference,
-=======
           category: studentsList[0]?.category || "school",
           mode: finalMode,
           area: groupArea,
@@ -1146,7 +898,6 @@ export default function ManualLeadsPage() {
           specificDays: pref.specificDays,
           preferredTimeRange: pref.preferredTimeRange,
           teacherGenderPreference: pref.teacherGenderPreference,
->>>>>>> origin/development-
           totalBudget: finalBudget,
           status: "active",
           managedByAdmin: true,
@@ -1163,11 +914,6 @@ export default function ManualLeadsPage() {
           requestId: generateCustomId("REQ"),
           groupDocId: groupDocId,
           parentDocId: parentDocId,
-<<<<<<< HEAD
-          studentsDetails: studentsDetailsList,
-          combinedSubjects: Array.from(allSubjectsSet),
-          combinedBudget: finalBudget,
-=======
           category: studentsList[0]?.category || "school",
           studentsDetails: studentsDetailsList,
           combinedSubjects: Array.from(allSubjectsSet),
@@ -1175,7 +921,6 @@ export default function ManualLeadsPage() {
           mode: finalMode,
           area: groupArea,
           city: groupCity,
->>>>>>> origin/development-
           managedByAdmin: true,
           status: "open",
           createdAt: now,
@@ -1239,8 +984,6 @@ export default function ManualLeadsPage() {
     }
   };
 
-<<<<<<< HEAD
-=======
   // Delete Lead (Full DB Cleanup)
   const handleDeleteLead = async (group: GroupLeadItem) => {
     if (!window.confirm(`Are you sure you want to completely delete "${group.name}"? This action cannot be undone and will remove the group, students, and any teacher requests.`)) {
@@ -1288,7 +1031,6 @@ export default function ManualLeadsPage() {
     }
   };
 
->>>>>>> origin/development-
   return (
     <div className="space-y-8">
       {/* Toast Notification */}
@@ -1476,14 +1218,9 @@ export default function ManualLeadsPage() {
                           <div className="flex items-center gap-1.5 text-xs text-slate-500">
                             <MapPin className="w-3.5 h-3.5 text-slate-400 shrink-0" />
                             <span>
-<<<<<<< HEAD
-                              {group.area ? `${group.area}, ` : ""}
-                              {group.city || "Bengaluru"}
-=======
                               {group.mode === "Online"
                                 ? "Online Tuition"
                                 : `${group.area ? `${group.area}, ` : ""}${group.city || "Bengaluru"}`}
->>>>>>> origin/development-
                             </span>
                           </div>
 
@@ -1634,8 +1371,6 @@ export default function ManualLeadsPage() {
                           >
                             <Edit2 className="w-4 h-4" />
                           </button>
-<<<<<<< HEAD
-=======
                           <button
                             onClick={() => handleDeleteLead(group)}
                             className="p-2 rounded-xl text-slate-400 hover:bg-red-50 hover:text-red-600 transition-colors"
@@ -1643,7 +1378,6 @@ export default function ManualLeadsPage() {
                           >
                             <Trash2 className="w-4 h-4" />
                           </button>
->>>>>>> origin/development-
                         </div>
                       </td>
                     </tr>
@@ -1697,11 +1431,7 @@ export default function ManualLeadsPage() {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-xs font-bold text-slate-700 mb-1">
-<<<<<<< HEAD
-                      Parent Legal Name *
-=======
                       Parent / Guardian Name *
->>>>>>> origin/development-
                     </label>
                     <input
                       type="text"
@@ -1709,9 +1439,6 @@ export default function ManualLeadsPage() {
                       placeholder="e.g. Ramesh Sharma"
                       value={parentName}
                       onChange={(e) => setParentName(e.target.value)}
-<<<<<<< HEAD
-                      className="w-full px-3.5 py-2.5 bg-white border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 font-medium"
-=======
                       className="w-full px-3.5 py-2.5 bg-white border border-slate-300 rounded-xl text-sm text-slate-900 font-semibold placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:text-black focus:border-emerald-600"
                     />
                   </div>
@@ -1726,7 +1453,6 @@ export default function ManualLeadsPage() {
                       value={parentEmail}
                       onChange={(e) => setParentEmail(e.target.value)}
                       className="w-full px-3.5 py-2.5 bg-white border border-slate-300 rounded-xl text-sm text-slate-900 font-semibold placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:text-black focus:border-emerald-600"
->>>>>>> origin/development-
                     />
                   </div>
 
@@ -1734,78 +1460,6 @@ export default function ManualLeadsPage() {
                     <label className="block text-xs font-bold text-slate-700 mb-1">
                       Phone Number (10 digits) *
                     </label>
-<<<<<<< HEAD
-                    <input
-                      type="tel"
-                      required
-                      maxLength={10}
-                      placeholder="e.g. 9876543210"
-                      value={parentPhone}
-                      onChange={(e) => setParentPhone(e.target.value)}
-                      className="w-full px-3.5 py-2.5 bg-white border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 font-medium"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-xs font-bold text-slate-700 mb-1">
-                      City *
-                    </label>
-                    <input
-                      type="text"
-                      required
-                      placeholder="e.g. Bengaluru"
-                      value={city}
-                      onChange={(e) => setCity(e.target.value)}
-                      className="w-full px-3.5 py-2.5 bg-white border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 font-medium"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-xs font-bold text-slate-700 mb-1">
-                      Locality / Area *
-                    </label>
-                    <input
-                      type="text"
-                      required
-                      placeholder="e.g. Indiranagar, Stage 2"
-                      value={area}
-                      onChange={(e) => setArea(e.target.value)}
-                      className="w-full px-3.5 py-2.5 bg-white border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 font-medium"
-                    />
-                  </div>
-                </div>
-
-                {/* WhatsApp Checkbox */}
-                <div className="flex items-center gap-2 pt-1">
-                  <input
-                    type="checkbox"
-                    id="sameAsPhone"
-                    checked={sameAsPhone}
-                    onChange={(e) => setSameAsPhone(e.target.checked)}
-                    className="w-4 h-4 rounded-md text-emerald-600 focus:ring-emerald-500"
-                  />
-                  <label htmlFor="sameAsPhone" className="text-xs font-semibold text-slate-600">
-                    WhatsApp number is same as primary contact phone
-                  </label>
-                </div>
-
-                {!sameAsPhone && (
-                  <div>
-                    <label className="block text-xs font-bold text-slate-700 mb-1">
-                      Dedicated WhatsApp Number
-                    </label>
-                    <input
-                      type="tel"
-                      maxLength={10}
-                      placeholder="e.g. 9876543210"
-                      value={parentWhatsapp}
-                      onChange={(e) => setParentWhatsapp(e.target.value)}
-                      className="w-full px-3.5 py-2.5 bg-white border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 font-medium"
-                    />
-                  </div>
-                )}
-
-=======
                     <div className="relative">
                       <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-500 font-bold text-xs">+91</span>
                       <input
@@ -1860,7 +1514,6 @@ export default function ManualLeadsPage() {
                   </div>
                 </div>
 
->>>>>>> origin/development-
                 <div>
                   <label className="block text-xs font-bold text-slate-700 mb-1">
                     Admin Consultation Notes (Internal or Special Parent Requests)
@@ -1870,63 +1523,11 @@ export default function ManualLeadsPage() {
                     placeholder="e.g. Mother requested female tutor if possible; student has upcoming term exam in 3 weeks."
                     value={adminNotes}
                     onChange={(e) => setAdminNotes(e.target.value)}
-<<<<<<< HEAD
-                    className="w-full px-3.5 py-2.5 bg-white border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 font-medium"
-=======
                     className="w-full px-3.5 py-2.5 bg-white border border-slate-300 rounded-xl text-sm text-slate-900 font-semibold placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:text-black focus:border-emerald-600"
->>>>>>> origin/development-
                   />
                 </div>
               </div>
 
-<<<<<<< HEAD
-              {/* SECTION 2: Dynamic Students Builder */}
-              <div className="space-y-4 bg-slate-50/70 p-5 rounded-2xl border border-slate-200/70">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <GraduationCap className="w-4 h-4 text-emerald-600" />
-                    <h3 className="font-bold text-sm text-slate-900 uppercase tracking-wider">
-                      Student(s) / Siblings ({studentsList.length})
-                    </h3>
-                  </div>
-
-                  <button
-                    type="button"
-                    onClick={handleAddStudent}
-                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-50 text-emerald-700 border border-emerald-200 text-xs font-bold hover:bg-emerald-100 transition-colors"
-                  >
-                    <Plus className="w-3.5 h-3.5" />
-                    <span>Add Another Student</span>
-                  </button>
-                </div>
-
-                <div className="space-y-4">
-                  {studentsList.map((student, idx) => (
-                    <div
-                      key={idx}
-                      className="p-4 bg-white rounded-2xl border border-slate-200 shadow-xs space-y-3 relative"
-                    >
-                      <div className="flex items-center justify-between">
-                        <span className="text-xs font-black uppercase tracking-wider text-slate-400">
-                          Student #{idx + 1}
-                        </span>
-                        {studentsList.length > 1 && (
-                          <button
-                            type="button"
-                            onClick={() => handleRemoveStudent(idx)}
-                            className="p-1 rounded-lg text-slate-400 hover:text-red-600 hover:bg-red-50 transition-colors"
-                            title="Remove student"
-                          >
-                            <Trash2 className="w-4 h-4" />
-                          </button>
-                        )}
-                      </div>
-
-                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                        <div>
-                          <label className="block text-xs font-bold text-slate-700 mb-1">
-                            Student Name *
-=======
               {/* SECTION 2: Number of Students & Profiles */}
               <div className="space-y-4 bg-slate-50/70 p-5 rounded-2xl border border-slate-200/70">
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-200 pb-3">
@@ -2009,120 +1610,19 @@ export default function ManualLeadsPage() {
                         <div>
                           <label className="block text-xs font-bold text-slate-700 mb-1">
                             Student Full Name *
->>>>>>> origin/development-
                           </label>
                           <input
                             type="text"
                             required
-<<<<<<< HEAD
-                            placeholder="e.g. Aryan Sharma"
-                            value={student.name}
-                            onChange={(e) => handleUpdateStudent(idx, "name", e.target.value)}
-                            className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 font-medium"
-=======
                             placeholder="Enter student full name"
                             value={student.name}
                             onChange={(e) => handleUpdateStudent(idx, "name", e.target.value)}
                             className="w-full px-3.5 py-2.5 bg-white border border-slate-300 rounded-xl text-sm text-slate-900 font-semibold placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:text-black focus:border-emerald-600"
->>>>>>> origin/development-
                           />
                         </div>
 
                         <div>
                           <label className="block text-xs font-bold text-slate-700 mb-1">
-<<<<<<< HEAD
-                            Gender
-                          </label>
-                          <select
-                            value={student.gender}
-                            onChange={(e) => handleUpdateStudent(idx, "gender", e.target.value)}
-                            className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 font-medium"
-                          >
-                            <option value="Male">Male</option>
-                            <option value="Female">Female</option>
-                            <option value="Other">Other</option>
-                          </select>
-                        </div>
-
-                        <div>
-                          <label className="block text-xs font-bold text-slate-700 mb-1">
-                            Category
-                          </label>
-                          <select
-                            value={student.category}
-                            onChange={(e) => handleUpdateStudent(idx, "category", e.target.value)}
-                            className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 font-medium"
-                          >
-                            <option value="school">School Tuitions</option>
-                            <option value="competitive">Competitive Exams</option>
-                            <option value="programming">Programming & Tech</option>
-                            <option value="languages">Languages</option>
-                          </select>
-                        </div>
-
-                        <div>
-                          <label className="block text-xs font-bold text-slate-700 mb-1">
-                            Class / Grade *
-                          </label>
-                          <input
-                            type="text"
-                            required
-                            placeholder="e.g. Class 10"
-                            value={student.classLevel}
-                            onChange={(e) => handleUpdateStudent(idx, "classLevel", e.target.value)}
-                            className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 font-medium"
-                          />
-                        </div>
-
-                        <div>
-                          <label className="block text-xs font-bold text-slate-700 mb-1">
-                            Board *
-                          </label>
-                          <select
-                            value={student.board}
-                            onChange={(e) => handleUpdateStudent(idx, "board", e.target.value)}
-                            className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 font-medium"
-                          >
-                            <option value="CBSE">CBSE</option>
-                            <option value="ICSE">ICSE</option>
-                            <option value="State Board">State Board</option>
-                            <option value="IB">IB</option>
-                            <option value="Other">Other</option>
-                          </select>
-                        </div>
-
-                        <div>
-                          <label className="block text-xs font-bold text-slate-700 mb-1">
-                            Monthly Budget (INR) *
-                          </label>
-                          <input
-                            type="number"
-                            required
-                            min={500}
-                            placeholder="e.g. 5000"
-                            value={student.budget}
-                            onChange={(e) =>
-                              handleUpdateStudent(idx, "budget", Number(e.target.value))
-                            }
-                            className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 font-medium"
-                          />
-                        </div>
-                      </div>
-
-                      <div>
-                        <label className="block text-xs font-bold text-slate-700 mb-1">
-                          Subjects (comma separated) *
-                        </label>
-                        <input
-                          type="text"
-                          required
-                          placeholder="e.g. Mathematics, Physics, Chemistry"
-                          value={student.subjectsStr}
-                          onChange={(e) => handleUpdateStudent(idx, "subjectsStr", e.target.value)}
-                          className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 font-medium"
-                        />
-                      </div>
-=======
                             Gender *
                           </label>
                           <div className="flex gap-4 pt-2">
@@ -2394,7 +1894,6 @@ export default function ManualLeadsPage() {
                           )}
                         </div>
                       )}
->>>>>>> origin/development-
                     </div>
                   ))}
                 </div>
@@ -2405,52 +1904,6 @@ export default function ManualLeadsPage() {
                 <div className="flex items-center gap-2">
                   <BookOpen className="w-4 h-4 text-emerald-600" />
                   <h3 className="font-bold text-sm text-slate-900 uppercase tracking-wider">
-<<<<<<< HEAD
-                    Tuition & Schedule Preferences
-                  </h3>
-                </div>
-
-                {/* Multi-Student Strategy Toggle */}
-                {studentsList.length > 1 && !editingGroupId && (
-                  <div className="bg-white p-3.5 rounded-2xl border border-slate-200 space-y-2">
-                    <label className="block text-xs font-bold text-slate-700">
-                      Multi-Student Grouping Option:
-                    </label>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                      <button
-                        type="button"
-                        onClick={() => setGroupingStrategy("combined")}
-                        className={`p-3 rounded-xl border text-left transition-all ${
-                          groupingStrategy === "combined"
-                            ? "bg-emerald-50 border-emerald-300 ring-2 ring-emerald-500/20"
-                            : "border-slate-200 hover:bg-slate-50"
-                        }`}
-                      >
-                        <p className="font-bold text-xs text-slate-900">
-                          Combined Tuition Group
-                        </p>
-                        <p className="text-[11px] text-slate-500 mt-0.5">
-                          1 teacher instructs all siblings together in 1 joint batch.
-                        </p>
-                      </button>
-
-                      <button
-                        type="button"
-                        onClick={() => setGroupingStrategy("separate")}
-                        className={`p-3 rounded-xl border text-left transition-all ${
-                          groupingStrategy === "separate"
-                            ? "bg-emerald-50 border-emerald-300 ring-2 ring-emerald-500/20"
-                            : "border-slate-200 hover:bg-slate-50"
-                        }`}
-                      >
-                        <p className="font-bold text-xs text-slate-900">
-                          Separate Individual Tuitions
-                        </p>
-                        <p className="text-[11px] text-slate-500 mt-0.5">
-                          Creates individual cards for each student to hire different tutors.
-                        </p>
-                      </button>
-=======
                     {studentsList.length > 1 ? "Student Groups & Schedule Preferences" : "Tuition & Schedule Preferences"}
                   </h3>
                 </div>
@@ -2473,130 +1926,10 @@ export default function ManualLeadsPage() {
                           }, 150);
                         }}
                       />
->>>>>>> origin/development-
                     </div>
                   </div>
                 )}
 
-<<<<<<< HEAD
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-xs font-bold text-slate-700 mb-1">
-                      Delivery Mode
-                    </label>
-                    <select
-                      value={deliveryMode}
-                      onChange={(e) => setDeliveryMode(e.target.value as any)}
-                      className="w-full px-3.5 py-2.5 bg-white border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 font-medium"
-                    >
-                      <option value="Offline">Offline (Home Tuition)</option>
-                      <option value="Online">Online Tuition</option>
-                    </select>
-                  </div>
-
-                  <div>
-                    <label className="block text-xs font-bold text-slate-700 mb-1">
-                      Days per Week
-                    </label>
-                    <select
-                      value={daysPerWeek}
-                      onChange={(e) => setDaysPerWeek(e.target.value)}
-                      className="w-full px-3.5 py-2.5 bg-white border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 font-medium"
-                    >
-                      <option value="5 Days/Week">5 Days/Week (Mon - Fri)</option>
-                      <option value="3 Days/Week">3 Days/Week (Alternate Days)</option>
-                      <option value="2 Days/Week">2 Days/Week</option>
-                      <option value="Weekends Only">Weekends Only (Sat - Sun)</option>
-                      <option value="Custom">Custom Days</option>
-                    </select>
-                  </div>
-
-                  <div>
-                    <label className="block text-xs font-bold text-slate-700 mb-1">
-                      Preferred Time Slot
-                    </label>
-                    <select
-                      value={preferredTimeRange}
-                      onChange={(e) => setPreferredTimeRange(e.target.value)}
-                      className="w-full px-3.5 py-2.5 bg-white border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 font-medium"
-                    >
-                      <option value="Morning (8 AM - 12 PM)">Morning (8 AM - 12 PM)</option>
-                      <option value="Afternoon (12 PM - 4 PM)">Afternoon (12 PM - 4 PM)</option>
-                      <option value="Evening (4 PM - 8 PM)">Evening (4 PM - 8 PM)</option>
-                      <option value="Flexible">Flexible / Mutual Agreement</option>
-                    </select>
-                  </div>
-
-                  <div>
-                    <label className="block text-xs font-bold text-slate-700 mb-1">
-                      Teacher Gender Preference
-                    </label>
-                    <select
-                      value={teacherGenderPreference}
-                      onChange={(e) => setTeacherGenderPreference(e.target.value)}
-                      className="w-full px-3.5 py-2.5 bg-white border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 font-medium"
-                    >
-                      <option value="No Preference">No Preference</option>
-                      <option value="Female">Female Tutor Preferred</option>
-                      <option value="Male">Male Tutor Preferred</option>
-                    </select>
-                  </div>
-                </div>
-
-                {/* Specific Days Chips */}
-                <div>
-                  <label className="block text-xs font-bold text-slate-700 mb-1.5">
-                    Specific Days Scheduled
-                  </label>
-                  <div className="flex flex-wrap gap-1.5">
-                    {DAYS_OF_WEEK.map((d) => {
-                      const isSel = specificDays.includes(d);
-                      return (
-                        <button
-                          key={d}
-                          type="button"
-                          onClick={() => toggleDay(d)}
-                          className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${
-                            isSel
-                              ? "bg-emerald-600 text-white shadow-xs"
-                              : "bg-white text-slate-600 border border-slate-200 hover:bg-slate-50"
-                          }`}
-                        >
-                          {d}
-                        </button>
-                      );
-                    })}
-                  </div>
-                </div>
-
-                {/* Total Budget Calculator */}
-                <div className="bg-white p-4 rounded-2xl border border-slate-200 flex items-center justify-between">
-                  <div>
-                    <p className="text-xs font-bold text-slate-500 uppercase">
-                      Total Monthly Budget
-                    </p>
-                    <p className="text-xs text-slate-400 mt-0.5">
-                      Auto-summed from student inputs: ₹{calculatedTotalBudget.toLocaleString()}
-                    </p>
-                  </div>
-                  <div className="flex items-center gap-1.5">
-                    <span className="text-sm font-bold text-slate-700">₹</span>
-                    <input
-                      type="number"
-                      placeholder={String(calculatedTotalBudget)}
-                      value={customTotalBudget}
-                      onChange={(e) =>
-                        setCustomTotalBudget(e.target.value ? Number(e.target.value) : "")
-                      }
-                      className="w-32 px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold text-emerald-700 focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                    />
-                    <span className="text-xs font-bold text-slate-400">/mo</span>
-                  </div>
-                </div>
-              </div>
-
-              {/* Submit Buttons */}
-=======
                 {/* If multiple students and groups NOT saved yet: Show lock indicator */}
                 {studentsList.length > 1 && !isGroupsSaved && !editingGroupId ? (
                   <div className="bg-amber-50 border border-amber-200 p-4 rounded-2xl flex items-center gap-3 text-amber-800 text-xs font-semibold">
@@ -2820,7 +2153,6 @@ export default function ManualLeadsPage() {
               </div>
               
 {/* Submit Buttons */}
->>>>>>> origin/development-
               <div className="flex items-center justify-end gap-3 pt-4 border-t border-slate-100">
                 <button
                   type="button"
