@@ -186,11 +186,7 @@ export default function GroupManager({ students, onSave, onCancel, isModal = fal
     setSelectedStudents([]);
   };
 
-  const handleSave = (e?: React.MouseEvent) => {
-    if (e) {
-      e.preventDefault();
-      e.stopPropagation();
-    }
+  const handleSave = () => {
     const updatedStudents: Student[] = [];
     
     Object.keys(groups).forEach(groupId => {
@@ -311,7 +307,6 @@ export default function GroupManager({ students, onSave, onCancel, isModal = fal
                         </span>
                       </div>
                       <button 
-                        type="button"
                         onClick={() => removeGroup(groupId)}
                         className="text-gray-400 hover:text-red-500 transition-colors p-1 rounded-md hover:bg-red-50"
                         title="Remove Group"
@@ -340,8 +335,8 @@ export default function GroupManager({ students, onSave, onCancel, isModal = fal
                           </div>
                         ))}
                         <div className="mt-auto pt-4 flex gap-2">
-                          <button type="button" onClick={() => setSelectionMode(null)} className="flex-1 py-2 text-xs font-bold text-gray-600 bg-gray-100 rounded-lg hover:bg-gray-200">Cancel</button>
-                          <button type="button" onClick={applySelection} className="flex-1 py-2 text-xs font-bold text-white bg-[#00a992] rounded-lg hover:bg-emerald-600">Apply</button>
+                          <button onClick={() => setSelectionMode(null)} className="flex-1 py-2 text-xs font-bold text-gray-600 bg-gray-100 rounded-lg hover:bg-gray-200">Cancel</button>
+                          <button onClick={applySelection} className="flex-1 py-2 text-xs font-bold text-white bg-[#00a992] rounded-lg hover:bg-emerald-600">Apply</button>
                         </div>
                       </div>
                     ) : (
@@ -382,7 +377,6 @@ export default function GroupManager({ students, onSave, onCancel, isModal = fal
                         
                         <div className="mt-4 pt-4 border-t border-gray-100">
                           <button 
-                            type="button"
                             onClick={() => toggleSelectionMode(groupId)}
                             className="w-full py-2 text-xs font-bold text-[#00a992] bg-emerald-50 rounded-lg hover:bg-emerald-100 transition-colors"
                           >
@@ -399,7 +393,6 @@ export default function GroupManager({ students, onSave, onCancel, isModal = fal
             {/* Add Group Button */}
             <div className="min-h-[250px] flex items-center justify-center">
               <button 
-                type="button"
                 onClick={addGroup}
                 className="flex flex-col items-center justify-center gap-3 w-full h-full border-2 border-dashed border-gray-300 rounded-2xl text-gray-500 hover:text-[#00a992] hover:border-[#00a992] hover:bg-emerald-50/30 transition-all group"
               >
@@ -417,7 +410,6 @@ export default function GroupManager({ students, onSave, onCancel, isModal = fal
       <div className="p-4 sm:p-6 bg-white border-t border-gray-100 flex flex-col sm:flex-row justify-end gap-3">
         {onCancel && (
           <button 
-            type="button"
             onClick={onCancel}
             className="w-full sm:w-auto px-6 py-3 font-bold text-gray-600 bg-gray-100 rounded-xl hover:bg-gray-200 transition-colors text-center"
           >
@@ -425,14 +417,12 @@ export default function GroupManager({ students, onSave, onCancel, isModal = fal
           </button>
         )}
         <button 
-          type="button"
           onClick={() => resetGroups(true)}
           className="w-full sm:w-auto px-6 py-3 font-bold text-amber-700 bg-amber-50 rounded-xl hover:bg-amber-100 border border-amber-200 transition-colors flex items-center justify-center gap-2"
         >
           <RotateCcw className="w-5 h-5" /> Undo Changes
         </button>
         <button 
-          type="button"
           onClick={handleSave}
           className="w-full sm:w-auto px-8 py-3 font-bold text-white bg-[#00a992] rounded-xl shadow-md hover:bg-emerald-600 transition-colors flex items-center justify-center gap-2"
         >

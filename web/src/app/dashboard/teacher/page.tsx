@@ -1773,15 +1773,9 @@ export default function TeacherDashboard() {
                           const isSendingThisAdminRequest = sendingAdminRequestId === group.id;
 
                           return (
-<<<<<<< HEAD
                             <div key={group.id} className={`bg-white rounded-3xl shadow-md border flex flex-col h-full overflow-hidden relative group ${isManagedByAdmin ? 'border-indigo-200 ring-1 ring-indigo-100 shadow-indigo-100/50' : 'border-gray-100'}`}>
                               {/* Header */}
                               <div className={`p-4 flex items-center justify-between ${isManagedByAdmin ? 'bg-gradient-to-r from-indigo-700 via-indigo-800 to-slate-900 text-white' : 'bg-[#00a992] text-white'}`}>
-=======
-                            <div key={group.id} className={`bg-white rounded-3xl shadow-md border flex flex-col h-full overflow-hidden relative group ${isManagedByAdmin ? 'border-emerald-200 ring-1 ring-emerald-100/80 shadow-emerald-100/40' : 'border-gray-100'}`}>
-                              {/* Header */}
-                              <div className={`p-4 flex items-center justify-between ${isManagedByAdmin ? 'bg-gradient-to-r from-[#00a992] via-emerald-700 to-teal-900 text-white' : 'bg-[#00a992] text-white'}`}>
->>>>>>> origin/development-
                                 <div className="flex items-center gap-3 flex-1 min-w-0 pr-3">
                                   {group.rank && !isManagedByAdmin && (
                                     <div className={`w-8 h-8 rounded-full flex items-center justify-center font-black text-sm shadow-md flex-shrink-0 ${group.rank === 1 ? 'bg-yellow-400 text-yellow-900' : group.rank === 2 ? 'bg-gray-200 text-gray-800' : group.rank === 3 ? 'bg-orange-500 text-white' : 'bg-white/20 text-white backdrop-blur-sm'}`}>
@@ -1792,11 +1786,7 @@ export default function TeacherDashboard() {
                                 </div>
                                 {isManagedByAdmin ? (
                                   <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-white/20 text-white text-[10px] font-black rounded-full uppercase tracking-wider backdrop-blur-xs border border-white/25">
-<<<<<<< HEAD
                                     <PhoneCall className="w-3 h-3 text-indigo-200" />
-=======
-                                    <PhoneCall className="w-3 h-3 text-emerald-200" />
->>>>>>> origin/development-
                                     <span>Managed by Admin</span>
                                   </span>
                                 ) : labelText ? (
@@ -1818,26 +1808,16 @@ export default function TeacherDashboard() {
                                 </div>
 
                                 {isManagedByAdmin && (
-<<<<<<< HEAD
                                   <div className="bg-indigo-50/80 border border-indigo-100 rounded-2xl p-3 mb-4 flex items-start gap-2.5">
                                     <PhoneCall className="w-4 h-4 text-indigo-600 shrink-0 mt-0.5" />
                                     <p className="text-xs text-indigo-900 font-medium leading-relaxed">
-=======
-                                  <div className="bg-emerald-50/80 border border-emerald-200 rounded-2xl p-3 mb-4 flex items-start gap-2.5">
-                                    <PhoneCall className="w-4 h-4 text-[#00a992] shrink-0 mt-0.5" />
-                                    <p className="text-xs text-emerald-950 font-medium leading-relaxed">
->>>>>>> origin/development-
                                       Direct phone consultation lead. Mi-Tutora admin personally coordinates teacher selection, demo trial, and payments.
                                     </p>
                                   </div>
                                 )}
                                 
                                 {/* Details Box */}
-<<<<<<< HEAD
                                 <div className={`rounded-2xl p-4 space-y-3 mb-6 ${isManagedByAdmin ? 'bg-indigo-50/40 border border-indigo-100/60' : 'bg-emerald-50/50'}`}>
-=======
-                                <div className="rounded-2xl p-4 space-y-3 mb-6 bg-emerald-50/50 border border-emerald-100/60">
->>>>>>> origin/development-
                                   <div className="flex items-center gap-2 text-sm">
                                     <LayoutDashboard className={`w-4 h-4 ${isManagedByAdmin ? 'text-indigo-600' : 'text-[#00a992]'}`} />
                                     <span className="text-slate-600 font-bold">Class:</span>
@@ -1851,15 +1831,9 @@ export default function TeacherDashboard() {
                                   <div className="flex items-center gap-2 text-sm">
                                     <Wallet className={`w-4 h-4 ${isManagedByAdmin ? 'text-indigo-600' : 'text-[#00a992]'}`} />
                                     <span className="text-slate-600 font-bold">Budget:</span>
-<<<<<<< HEAD
                                     <span className={`font-bold ${isManagedByAdmin ? 'text-indigo-700' : 'text-[#00a992]'}`}>₹{group.budget}/mo</span>
                                     {isManagedByAdmin && (
                                       <span className="text-[10px] text-indigo-500/80 font-semibold">(Fixed)</span>
-=======
-                                    <span className="font-bold text-[#00a992]">₹{group.budget}/mo</span>
-                                    {isManagedByAdmin && (
-                                      <span className="text-[10px] text-emerald-600/80 font-semibold">(Fixed)</span>
->>>>>>> origin/development-
                                     )}
                                   </div>
                                 </div>
@@ -1875,34 +1849,21 @@ export default function TeacherDashboard() {
                                             e.stopPropagation();
                                             window.open(mapsUrl, '_blank', 'noopener,noreferrer');
                                           }}
-<<<<<<< HEAD
                                           className="w-full mb-3 py-2 px-3 bg-indigo-50/70 hover:bg-indigo-100 text-indigo-900 border border-indigo-200 rounded-full font-bold text-xs flex items-center justify-center gap-1.5 transition-all active:scale-[0.98] shadow-xs"
                                         >
                                           <MapPin className="w-3.5 h-3.5 text-indigo-600" />
                                           <span>View on Google Maps</span>
                                           <ExternalLink className="w-3 h-3 text-indigo-600 opacity-80" />
-=======
-                                          className="w-full mb-3 py-2 px-3 bg-emerald-50/80 hover:bg-emerald-100 text-emerald-900 border border-emerald-200 rounded-full font-bold text-xs flex items-center justify-center gap-1.5 transition-all active:scale-[0.98] shadow-xs"
-                                        >
-                                          <MapPin className="w-3.5 h-3.5 text-[#00a992]" />
-                                          <span>View on Google Maps</span>
-                                          <ExternalLink className="w-3 h-3 text-[#00a992] opacity-80" />
->>>>>>> origin/development-
                                         </button>
                                       )}
                                       <div className="flex gap-2">
                                         <button 
                                           onClick={() => setSelectedViewUser(buildStudentViewUser(group, group))}
-<<<<<<< HEAD
                                           className="flex-1 py-2 sm:py-2.5 text-indigo-700 font-bold text-xs sm:text-sm bg-white border border-indigo-200 rounded-full hover:bg-indigo-50 transition-all active:scale-95 truncate px-2 sm:px-4"
-=======
-                                          className="flex-1 py-2 sm:py-2.5 text-emerald-700 font-bold text-xs sm:text-sm bg-white border border-emerald-200 rounded-full hover:bg-emerald-50 transition-all active:scale-95 truncate px-2 sm:px-4"
->>>>>>> origin/development-
                                         >
                                           View
                                         </button>
                                         {hasAppliedAdminLead ? (
-<<<<<<< HEAD
                                           <button
                                             disabled
                                             className="flex-[2] py-2 sm:py-2.5 font-bold text-xs sm:text-sm rounded-full flex items-center justify-center gap-1.5 bg-slate-100 text-slate-500 border border-slate-200 cursor-not-allowed px-2 sm:px-4 truncate"
@@ -1910,24 +1871,11 @@ export default function TeacherDashboard() {
                                             <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
                                             <span className="truncate">Request Sent • Admin Will Call</span>
                                           </button>
-=======
-                                          <a
-                                            href={`tel:${group.adminPhone || '+917483034168'}`}
-                                            className="flex-[2] py-2 sm:py-2.5 font-bold text-xs sm:text-sm rounded-full flex items-center justify-center gap-1.5 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 text-emerald-700 transition-all active:scale-95 px-2 sm:px-4 truncate"
-                                          >
-                                            <PhoneCall className="w-4 h-4 shrink-0" />
-                                            <span className="truncate">Call Admin</span>
-                                          </a>
->>>>>>> origin/development-
                                         ) : (
                                           <button
                                             onClick={() => handleSendAdminLeadRequest(group)}
                                             disabled={isSendingThisAdminRequest}
-<<<<<<< HEAD
                                             className="flex-[2] py-2 sm:py-2.5 font-bold text-xs sm:text-sm rounded-full flex items-center justify-center gap-1.5 bg-indigo-600 hover:bg-indigo-700 text-white transition-all active:scale-95 shadow-md shadow-indigo-600/20 px-2 sm:px-4 truncate disabled:opacity-50"
-=======
-                                            className="flex-[2] py-2 sm:py-2.5 font-bold text-xs sm:text-sm rounded-full flex items-center justify-center gap-1.5 bg-[#00a992] hover:bg-[#008f7b] text-white transition-all active:scale-95 shadow-md shadow-[#00a992]/20 px-2 sm:px-4 truncate disabled:opacity-50"
->>>>>>> origin/development-
                                           >
                                             {isSendingThisAdminRequest ? (
                                               <>

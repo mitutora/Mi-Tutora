@@ -27,23 +27,10 @@ import {
   Loader2,
   AlertCircle,
   Calendar,
-<<<<<<< HEAD
-=======
-  CalendarDays,
->>>>>>> origin/development-
   MapPin,
   IndianRupee,
   BookOpen,
   GraduationCap,
-<<<<<<< HEAD
-=======
-  Building,
-  Award,
-  Laptop,
-  Languages,
-  Mail,
-  Globe,
->>>>>>> origin/development-
   Star,
   Eye,
   Check,
@@ -53,11 +40,6 @@ import {
   UserCheck
 } from "lucide-react";
 import { formatWhatsAppUrl, formatTelUrl } from "@/lib/contactResolver";
-<<<<<<< HEAD
-=======
-import GroupManager from "@/components/GroupManager";
-import { getSubjectsForStudent, isSeniorSecondary } from "@/utils/subjects";
->>>>>>> origin/development-
 
 function generateCustomId(prefix: string): string {
   const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
@@ -80,26 +62,12 @@ interface StudentFormItem {
   id?: string;
   studentId?: string;
   name: string;
-<<<<<<< HEAD
   gender: "Male" | "Female" | "Other";
   category: "school" | "competitive" | "programming" | "languages";
   classLevel: string;
   board: string;
   subjectsStr: string;
   budget: number;
-=======
-  gender: "Female" | "Male" | "Other";
-  category: "school" | "programming" | "languages";
-  budget: number;
-  studentType?: "School Student" | "College Student";
-  classLevel: string;
-  board: string;
-  stream?: string;
-  subjects: string[];
-  technologies?: string[];
-  languages?: string[];
-  groupDocId?: string;
->>>>>>> origin/development-
 }
 
 interface GroupLeadItem {
@@ -192,10 +160,6 @@ export default function ManualLeadsPage() {
 
   // Form Fields
   const [parentName, setParentName] = useState("");
-<<<<<<< HEAD
-=======
-  const [parentEmail, setParentEmail] = useState("");
->>>>>>> origin/development-
   const [parentPhone, setParentPhone] = useState("");
   const [parentWhatsapp, setParentWhatsapp] = useState("");
   const [sameAsPhone, setSameAsPhone] = useState(true);
@@ -203,7 +167,6 @@ export default function ManualLeadsPage() {
   const [area, setArea] = useState("");
   const [adminNotes, setAdminNotes] = useState("");
 
-<<<<<<< HEAD
   // Students list in form
   const [studentsList, setStudentsList] = useState<StudentFormItem[]>([
     {
@@ -219,35 +182,6 @@ export default function ManualLeadsPage() {
 
   // Group Preferences
   const [groupingStrategy, setGroupingStrategy] = useState<"combined" | "separate">("combined");
-=======
-  // Number of Students selector (1 to 5)
-  const [numberOfStudents, setNumberOfStudents] = useState<number>(1);
-  const [isGroupsSaved, setIsGroupsSaved] = useState<boolean>(true);
-
-  // Students list in form
-  const [studentsList, setStudentsList] = useState<StudentFormItem[]>([
-    {
-      id: `new_${Date.now()}`,
-      name: "",
-      gender: "Male",
-      category: "school",
-      studentType: "School Student",
-      classLevel: "",
-      board: "CBSE",
-      subjects: [],
-      technologies: [],
-      languages: [],
-      budget: 5000,
-      groupDocId: "unassigned",
-    },
-  ]);
-
-  // Group Preferences Map (Per-group)
-  const [groupPreferences, setGroupPreferences] = useState<Record<string, any>>({});
-  
-  // Strategy step
-  const [groupingStrategy, setGroupingStrategy] = useState<"combined" | "separate" | "custom">("custom");
->>>>>>> origin/development-
   const [deliveryMode, setDeliveryMode] = useState<"Offline" | "Online">("Offline");
   const [daysPerWeek, setDaysPerWeek] = useState("5 Days/Week");
   const [specificDays, setSpecificDays] = useState<string[]>([
@@ -434,28 +368,19 @@ export default function ManualLeadsPage() {
 
   // Sum of student budgets
   const calculatedTotalBudget = useMemo(() => {
-<<<<<<< HEAD
     return studentsList.reduce((acc, curr) => acc + (Number(curr.budget) || 0), 0);
-=======
-    return studentsList.reduce((acc: number, curr: any) => acc + (Number(curr.budget) || 0), 0);
->>>>>>> origin/development-
   }, [studentsList]);
 
   // Open modal for new lead
   const handleOpenNewModal = () => {
     setEditingGroupId(null);
     setParentName("");
-<<<<<<< HEAD
-=======
-    setParentEmail("");
->>>>>>> origin/development-
     setParentPhone("");
     setParentWhatsapp("");
     setSameAsPhone(true);
     setCity("Bengaluru");
     setArea("");
     setAdminNotes("");
-<<<<<<< HEAD
     setStudentsList([
       {
         name: "",
@@ -468,28 +393,6 @@ export default function ManualLeadsPage() {
       },
     ]);
     setGroupingStrategy("combined");
-=======
-    setNumberOfStudents(1);
-    setIsGroupsSaved(true);
-    setStudentsList([
-      {
-        id: `new_${Date.now()}`,
-        name: "",
-        gender: "Male",
-        category: "school",
-        studentType: "School Student",
-        classLevel: "10th Standard",
-        board: "CBSE",
-        subjects: [],
-        technologies: [],
-        languages: [],
-        budget: 5000,
-        groupDocId: "unassigned",
-      },
-    ]);
-    setGroupPreferences({});
-    setGroupingStrategy("custom");
->>>>>>> origin/development-
     setDeliveryMode("Offline");
     setDaysPerWeek("5 Days/Week");
     setSpecificDays(["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"]);
@@ -504,10 +407,6 @@ export default function ManualLeadsPage() {
   const handleOpenEditModal = (group: GroupLeadItem) => {
     setEditingGroupId(group.id);
     setParentName(group.parent?.name || "");
-<<<<<<< HEAD
-=======
-    setParentEmail((group.parent as any)?.email || "");
->>>>>>> origin/development-
     setParentPhone(group.parent?.phone || "");
     setParentWhatsapp(group.parent?.whatsapp || group.parent?.phone || "");
     setSameAsPhone(
@@ -517,13 +416,6 @@ export default function ManualLeadsPage() {
     setArea(group.area || "");
     setAdminNotes(group.adminNotes || "");
 
-<<<<<<< HEAD
-=======
-    const studentCount = group.students && group.students.length > 0 ? group.students.length : 1;
-    setNumberOfStudents(studentCount);
-    setIsGroupsSaved(true);
-
->>>>>>> origin/development-
     if (group.students && group.students.length > 0) {
       setStudentsList(
         group.students.map((s) => ({
@@ -532,28 +424,15 @@ export default function ManualLeadsPage() {
           name: s.name,
           gender: (s.gender as any) || "Male",
           category: (s.category as any) || "school",
-<<<<<<< HEAD
           classLevel: s.classLevel || "Class 10",
           board: s.board || "CBSE",
           subjectsStr: (s.subjects || []).join(", "),
           budget: s.budget || 5000,
-=======
-          studentType: (s as any).studentType || "School Student",
-          classLevel: s.classLevel || "",
-          board: s.board || "CBSE",
-          subjects: s.subjects || [],
-          technologies: (s as any).technologies || (s.category === "programming" ? s.subjects : []),
-          languages: (s as any).languages || (s.category === "languages" ? s.subjects : []),
-          stream: (s as any).stream || "",
-          budget: s.budget || 5000,
-          groupDocId: group.id,
->>>>>>> origin/development-
         }))
       );
     } else {
       setStudentsList([
         {
-<<<<<<< HEAD
           name: group.name.replace("Group: ", ""),
           gender: "Male",
           category: "school",
@@ -561,43 +440,11 @@ export default function ManualLeadsPage() {
           board: "CBSE",
           subjectsStr: "All Subjects",
           budget: group.totalBudget || 5000,
-=======
-          id: `new_${Date.now()}`,
-          name: group.name.replace("Group: ", ""),
-          gender: "Male",
-          category: "school",
-          studentType: "School Student",
-          classLevel: "",
-          board: "CBSE",
-          subjects: [],
-          technologies: [],
-          languages: [],
-          budget: group.totalBudget || 5000,
-          groupDocId: group.id,
->>>>>>> origin/development-
         },
       ]);
     }
 
-<<<<<<< HEAD
     setGroupingStrategy("combined");
-=======
-    setGroupPreferences({
-      [group.id]: {
-        mode: (group.mode as any) || "Offline",
-        daysPerWeek: group.daysPerWeek || "5 Days/Week",
-        specificDays: group.specificDays || ["Monday", "Wednesday", "Friday"],
-        preferredTimeRange: group.preferredTimeRange || "Evening (4 PM - 8 PM)",
-        teacherGenderPreference: group.teacherGenderPreference || "No Preference",
-        addressFlat: (group as any).addressFlat || "",
-        addressStreet: (group as any).addressStreet || group.area || "",
-        city: group.city || "Bengaluru",
-        addressPincode: (group as any).addressPincode || "",
-      }
-    });
-
-    setGroupingStrategy("custom");
->>>>>>> origin/development-
     setDeliveryMode((group.mode as any) || "Offline");
     setDaysPerWeek(group.daysPerWeek || "5 Days/Week");
     setSpecificDays(group.specificDays || ["Monday", "Wednesday", "Friday"]);
@@ -608,7 +455,6 @@ export default function ManualLeadsPage() {
     setIsModalOpen(true);
   };
 
-<<<<<<< HEAD
   // Dynamic student list actions
   const handleAddStudent = () => {
     setStudentsList((prev) => [
@@ -628,37 +474,6 @@ export default function ManualLeadsPage() {
   const handleRemoveStudent = (index: number) => {
     if (studentsList.length <= 1) return;
     setStudentsList((prev) => prev.filter((_, i) => i !== index));
-=======
-  // Changing number of students via dropdown
-  const handleNumberOfStudentsChange = (count: number) => {
-    setNumberOfStudents(count);
-    setIsGroupsSaved(count === 1);
-    setStudentsList((prev) => {
-      if (count > prev.length) {
-        const added: StudentFormItem[] = [];
-        for (let i = prev.length; i < count; i++) {
-          added.push({
-            id: `new_${Date.now()}_${i}`,
-            name: "",
-            gender: "Female",
-            category: "school",
-            studentType: "School Student",
-            classLevel: "10th Standard",
-            board: "CBSE",
-            subjects: [],
-            technologies: [],
-            languages: [],
-            budget: 5000,
-            groupDocId: "unassigned",
-          });
-        }
-        return [...prev, ...added];
-      } else if (count < prev.length) {
-        return prev.slice(0, count);
-      }
-      return prev;
-    });
->>>>>>> origin/development-
   };
 
   const handleUpdateStudent = (index: number, field: keyof StudentFormItem, val: any) => {
@@ -688,13 +503,10 @@ export default function ManualLeadsPage() {
       setFormError("Please enter a valid 10-digit primary phone number.");
       return;
     }
-<<<<<<< HEAD
     if (!area.trim()) {
       setFormError("Locality / neighborhood area is required.");
       return;
     }
-=======
->>>>>>> origin/development-
 
     // Validate Students
     for (let i = 0; i < studentsList.length; i++) {
@@ -703,21 +515,8 @@ export default function ManualLeadsPage() {
         setFormError(`Student #${i + 1} name is required.`);
         return;
       }
-<<<<<<< HEAD
       if (!s.subjectsStr.trim()) {
         setFormError(`Subjects for Student #${i + 1} are required.`);
-=======
-      if (s.category === "school" && (!s.subjects || s.subjects.length === 0)) {
-        setFormError(`Please select at least one subject for Student #${i + 1}.`);
-        return;
-      }
-      if (s.category === "programming" && (!s.technologies || s.technologies.length === 0)) {
-        setFormError(`Please select at least one technology for Student #${i + 1}.`);
-        return;
-      }
-      if (s.category === "languages" && (!s.languages || s.languages.length === 0)) {
-        setFormError(`Please select at least one language for Student #${i + 1}.`);
->>>>>>> origin/development-
         return;
       }
       if (!s.budget || s.budget <= 0) {
@@ -726,25 +525,14 @@ export default function ManualLeadsPage() {
       }
     }
 
-<<<<<<< HEAD
-=======
-    if (studentsList.length > 1 && !isGroupsSaved && !editingGroupId) {
-      setFormError("Please organize your students into groups and click 'Save Groups' before publishing.");
-      return;
-    }
-
->>>>>>> origin/development-
     setSaving(true);
     try {
       const batch = writeBatch(db);
       const now = Date.now();
-<<<<<<< HEAD
       const finalBudget =
         typeof customTotalBudget === "number" && customTotalBudget > 0
           ? customTotalBudget
           : calculatedTotalBudget;
-=======
->>>>>>> origin/development-
 
       // 1. Parent Entity
       let parentDocId = "";
@@ -765,16 +553,10 @@ export default function ManualLeadsPage() {
         parentId: parentCustomId,
         parentDocId: parentDocId,
         name: parentName.trim(),
-<<<<<<< HEAD
         phone: cleanPhone,
         whatsapp: sameAsPhone ? cleanPhone : parentWhatsapp.replace(/\D/g, "") || cleanPhone,
         city: city.trim(),
         area: area.trim(),
-=======
-        email: parentEmail.trim(),
-        phone: cleanPhone,
-        whatsapp: sameAsPhone ? cleanPhone : parentWhatsapp.replace(/\D/g, "") || cleanPhone,
->>>>>>> origin/development-
         managedByAdmin: true,
         source: "manual_call",
         createdAt: now,
@@ -783,7 +565,6 @@ export default function ManualLeadsPage() {
       batch.set(doc(db, "parents", parentDocId), parentData, { merge: true });
 
       // 2. Student & Group Creation Logic
-<<<<<<< HEAD
       if (studentsList.length > 1 && groupingStrategy === "separate" && !editingGroupId) {
         // Create individual group per student
         for (const s of studentsList) {
@@ -816,102 +597,11 @@ export default function ManualLeadsPage() {
             managedByAdmin: true,
             createdAt: now,
           };
-=======
-      if (studentsList.length > 1 && groupingStrategy === "custom" && !editingGroupId) {
-        // Create custom groups based on GroupManager
-        const groupedStudents = new Map<string, StudentFormItem[]>();
-        studentsList.forEach((s) => {
-          const gid = s.groupDocId || "unassigned";
-          const list = groupedStudents.get(gid) || [];
-          list.push(s);
-          groupedStudents.set(gid, list);
-        });
-
-        for (const [gid, groupStudents] of Array.from(groupedStudents.entries())) {
-          const groupRef = doc(collection(db, "groups"));
-          const requestRef = doc(collection(db, "tuition_requests"), groupRef.id);
-          const groupCustomId = generateCustomId("MTG");
-          const requestCustomId = generateCustomId("REQ");
-
-          const studentDocIds: string[] = [];
-          const studentsDetailsList: any[] = [];
-          const allSubjectsSet = new Set<string>();
-          
-          const pref = groupPreferences[gid] || {
-             mode: "Offline",
-             daysPerWeek: "5 Days/Week",
-             specificDays: ["Monday", "Wednesday", "Friday"],
-             preferredTimeRange: "Evening (4 PM - 8 PM)",
-             teacherGenderPreference: "No Preference",
-             addressFlat: "",
-             addressStreet: "",
-             addressPincode: "",
-             city: "Bengaluru",
-          };
-          
-          const groupBudget = groupStudents.reduce((acc: number, curr: any) => acc + (Number(curr.budget) || 0), 0);
-          const groupHasProgramming = groupStudents.some(s => s.category === "programming");
-          const finalMode = groupHasProgramming ? "Online" : (pref.mode || "Offline");
-          const isOffline = finalMode === "Offline";
-          const groupArea = isOffline ? (pref.addressStreet || "") : "";
-          const groupCity = isOffline ? (pref.city || "Bengaluru") : "";
-
-          for (const s of groupStudents) {
-            const studentRef = doc(collection(db, "students"));
-            const studentCustomId = generateCustomId("MTS");
-            const parsedSubjects = s.category === "programming"
-              ? (s.technologies || [])
-              : s.category === "languages"
-              ? (s.languages || [])
-              : (s.subjects || []);
-
-            parsedSubjects.forEach((sub: string) => allSubjectsSet.add(sub));
-            studentDocIds.push(studentRef.id);
-
-            const studentData = {
-              id: studentRef.id,
-              studentId: studentCustomId,
-              parentDocId: parentDocId,
-              groupDocId: groupRef.id,
-              name: s.name.trim(),
-              gender: s.gender,
-              category: s.category,
-              studentType: s.studentType || "School Student",
-              classLevel: (s.classLevel || "").trim(),
-              board: (s.board || "").trim(),
-              stream: s.stream || "",
-              subjects: parsedSubjects,
-              technologies: s.technologies || [],
-              languages: s.languages || [],
-              budget: Number(s.budget),
-              isAvailable: true,
-              managedByAdmin: true,
-              createdAt: now,
-            };
-
-            studentsDetailsList.push({
-              studentId: studentCustomId,
-              name: s.name.trim(),
-              classLevel: s.classLevel.trim(),
-              board: s.board.trim(),
-              subjects: parsedSubjects,
-              budget: Number(s.budget),
-            });
-
-            batch.set(studentRef, studentData);
-          }
-
-          const groupName =
-            groupStudents.length === 1
-              ? groupStudents[0].name.trim()
-              : `Group: ${groupStudents.map((s: any) => s.name.trim()).join(", ")}`;
->>>>>>> origin/development-
 
           const groupData = {
             id: groupRef.id,
             groupId: groupCustomId,
             parentDocId: parentDocId,
-<<<<<<< HEAD
             studentDocIds: [studentRef.id],
             name: s.name.trim(),
             mode: deliveryMode,
@@ -922,22 +612,6 @@ export default function ManualLeadsPage() {
             preferredTimeRange: preferredTimeRange,
             teacherGenderPreference: teacherGenderPreference,
             totalBudget: Number(s.budget),
-=======
-            studentDocIds: studentDocIds,
-            name: groupName,
-            category: groupStudents[0]?.category || "school",
-            mode: finalMode,
-            area: groupArea,
-            city: groupCity,
-            addressFlat: isOffline ? (pref.addressFlat || "") : "",
-            addressStreet: isOffline ? (pref.addressStreet || "") : "",
-            addressPincode: isOffline ? (pref.addressPincode || "") : "",
-            daysPerWeek: pref.daysPerWeek,
-            specificDays: pref.specificDays,
-            preferredTimeRange: pref.preferredTimeRange,
-            teacherGenderPreference: pref.teacherGenderPreference,
-            totalBudget: groupBudget,
->>>>>>> origin/development-
             status: "active",
             managedByAdmin: true,
             source: "manual_call",
@@ -952,7 +626,6 @@ export default function ManualLeadsPage() {
             requestId: requestCustomId,
             groupDocId: groupRef.id,
             parentDocId: parentDocId,
-<<<<<<< HEAD
             studentsDetails: [
               {
                 studentId: studentCustomId,
@@ -965,29 +638,16 @@ export default function ManualLeadsPage() {
             ],
             combinedSubjects: parsedSubjects,
             combinedBudget: Number(s.budget),
-=======
-            category: groupStudents[0]?.category || "school",
-            studentsDetails: studentsDetailsList,
-            combinedSubjects: Array.from(allSubjectsSet),
-            combinedBudget: groupBudget,
-            mode: finalMode,
-            area: groupArea,
-            city: groupCity,
->>>>>>> origin/development-
             managedByAdmin: true,
             status: "open",
             createdAt: now,
           };
 
-<<<<<<< HEAD
           batch.set(studentRef, studentData);
-=======
->>>>>>> origin/development-
           batch.set(groupRef, groupData);
           batch.set(requestRef, requestData);
         }
       } else {
-<<<<<<< HEAD
         // Combined Joint Group (or single student)
         let groupDocId = "";
         let groupCustomId = "";
@@ -995,28 +655,6 @@ export default function ManualLeadsPage() {
         if (editingGroupId) {
           groupDocId = editingGroupId;
           const existingGroup = groups.find((g) => g.id === editingGroupId);
-=======
-        // Combined Joint Group (or single student, or editing existing)
-        let groupDocId = "";
-        let groupCustomId = "";
-        
-        const gid = editingGroupId || "all";
-        const pref = groupPreferences[gid] || {
-           mode: deliveryMode,
-           daysPerWeek: daysPerWeek,
-           specificDays: specificDays,
-           preferredTimeRange: preferredTimeRange,
-           teacherGenderPreference: teacherGenderPreference,
-           addressFlat: "",
-           addressStreet: "",
-           addressPincode: "",
-           city: "Bengaluru",
-        };
-
-        if (editingGroupId) {
-          groupDocId = editingGroupId;
-          const existingGroup = groups.find((g: any) => g.id === editingGroupId);
->>>>>>> origin/development-
           groupCustomId = existingGroup?.groupId || generateCustomId("MTG");
         } else {
           const groupRef = doc(collection(db, "groups"));
@@ -1029,7 +667,6 @@ export default function ManualLeadsPage() {
         const allSubjectsSet = new Set<string>();
 
         for (const s of studentsList) {
-<<<<<<< HEAD
           const sRef = s.id ? doc(db, "students", s.id) : doc(collection(db, "students"));
           const sCustomId = s.studentId || generateCustomId("MTS");
           const parsedSubjects = s.subjectsStr
@@ -1038,17 +675,6 @@ export default function ManualLeadsPage() {
             .filter(Boolean);
 
           parsedSubjects.forEach((sub) => allSubjectsSet.add(sub));
-=======
-          const sRef = (s.id && !s.id.startsWith("new_")) ? doc(db, "students", s.id) : doc(collection(db, "students"));
-          const sCustomId = s.studentId || generateCustomId("MTS");
-          const parsedSubjects = s.category === "programming"
-            ? (s.technologies || [])
-            : s.category === "languages"
-            ? (s.languages || [])
-            : (s.subjects || []);
-
-          parsedSubjects.forEach((sub: string) => allSubjectsSet.add(sub));
->>>>>>> origin/development-
           studentDocIds.push(sRef.id);
 
           const studentData = {
@@ -1059,19 +685,9 @@ export default function ManualLeadsPage() {
             name: s.name.trim(),
             gender: s.gender,
             category: s.category,
-<<<<<<< HEAD
             classLevel: s.classLevel.trim(),
             board: s.board.trim(),
             subjects: parsedSubjects,
-=======
-            studentType: s.studentType || "School Student",
-            classLevel: (s.classLevel || "").trim(),
-            board: (s.board || "").trim(),
-            stream: s.stream || "",
-            subjects: parsedSubjects,
-            technologies: s.technologies || [],
-            languages: s.languages || [],
->>>>>>> origin/development-
             budget: Number(s.budget),
             isAvailable: true,
             managedByAdmin: true,
@@ -1090,43 +706,17 @@ export default function ManualLeadsPage() {
           batch.set(sRef, studentData, { merge: true });
         }
 
-<<<<<<< HEAD
-=======
-        if (editingGroupId) {
-          const existingGroup = groups.find((g: any) => g.id === editingGroupId);
-          if (existingGroup && existingGroup.studentDocIds) {
-            const newIds = new Set(studentDocIds);
-            for (const oldId of existingGroup.studentDocIds) {
-              if (!newIds.has(oldId)) {
-                batch.delete(doc(db, "students", oldId));
-              }
-            }
-          }
-        }
-
->>>>>>> origin/development-
         const groupName =
           studentsList.length === 1
             ? studentsList[0].name.trim()
             : `Group: ${studentsList.map((s) => s.name.trim()).join(", ")}`;
 
-<<<<<<< HEAD
-=======
-        const finalBudget = studentsList.reduce((acc, curr) => acc + (Number(curr.budget) || 0), 0);
-        const groupHasProgramming = studentsList.some(s => s.category === "programming");
-        const finalMode = groupHasProgramming ? "Online" : (pref.mode || "Offline");
-        const isOffline = finalMode === "Offline";
-        const groupArea = isOffline ? (pref.addressStreet || "") : "";
-        const groupCity = isOffline ? (pref.city || "Bengaluru") : "";
-
->>>>>>> origin/development-
         const groupData = {
           id: groupDocId,
           groupId: groupCustomId,
           parentDocId: parentDocId,
           studentDocIds: studentDocIds,
           name: groupName,
-<<<<<<< HEAD
           mode: deliveryMode,
           area: area.trim(),
           city: city.trim(),
@@ -1134,19 +724,6 @@ export default function ManualLeadsPage() {
           specificDays: specificDays,
           preferredTimeRange: preferredTimeRange,
           teacherGenderPreference: teacherGenderPreference,
-=======
-          category: studentsList[0]?.category || "school",
-          mode: finalMode,
-          area: groupArea,
-          city: groupCity,
-          addressFlat: isOffline ? (pref.addressFlat || "") : "",
-          addressStreet: isOffline ? (pref.addressStreet || "") : "",
-          addressPincode: isOffline ? (pref.addressPincode || "") : "",
-          daysPerWeek: pref.daysPerWeek,
-          specificDays: pref.specificDays,
-          preferredTimeRange: pref.preferredTimeRange,
-          teacherGenderPreference: pref.teacherGenderPreference,
->>>>>>> origin/development-
           totalBudget: finalBudget,
           status: "active",
           managedByAdmin: true,
@@ -1163,19 +740,9 @@ export default function ManualLeadsPage() {
           requestId: generateCustomId("REQ"),
           groupDocId: groupDocId,
           parentDocId: parentDocId,
-<<<<<<< HEAD
           studentsDetails: studentsDetailsList,
           combinedSubjects: Array.from(allSubjectsSet),
           combinedBudget: finalBudget,
-=======
-          category: studentsList[0]?.category || "school",
-          studentsDetails: studentsDetailsList,
-          combinedSubjects: Array.from(allSubjectsSet),
-          combinedBudget: finalBudget,
-          mode: finalMode,
-          area: groupArea,
-          city: groupCity,
->>>>>>> origin/development-
           managedByAdmin: true,
           status: "open",
           createdAt: now,
@@ -1239,56 +806,6 @@ export default function ManualLeadsPage() {
     }
   };
 
-<<<<<<< HEAD
-=======
-  // Delete Lead (Full DB Cleanup)
-  const handleDeleteLead = async (group: GroupLeadItem) => {
-    if (!window.confirm(`Are you sure you want to completely delete "${group.name}"? This action cannot be undone and will remove the group, students, and any teacher requests.`)) {
-      return;
-    }
-
-    try {
-      setLoading(true);
-      const batch = writeBatch(db);
-
-      // 1. Delete Group
-      batch.delete(doc(db, "groups", group.id));
-
-      // 2. Delete Tuition Request
-      batch.delete(doc(db, "tuition_requests", group.id));
-
-      // 3. Delete Students
-      if (group.studentDocIds && group.studentDocIds.length > 0) {
-        group.studentDocIds.forEach(sId => {
-          batch.delete(doc(db, "students", sId));
-        });
-      }
-
-      // 4. Delete Admin Lead Requests
-      const apps = applicantsByGroup.get(group.id) || [];
-      apps.forEach(app => {
-        batch.delete(doc(db, "admin_lead_requests", app.id));
-      });
-
-      // 5. Check and Delete Parent if no other groups
-      if (group.parentDocId) {
-        const parentGroupsSnap = await getDocs(query(collection(db, "groups"), where("parentDocId", "==", group.parentDocId)));
-        if (parentGroupsSnap.size <= 1) {
-          batch.delete(doc(db, "parents", group.parentDocId));
-        }
-      }
-
-      await batch.commit();
-      showToast("Inquiry and all related records completely deleted.");
-    } catch (err) {
-      console.error("Error deleting inquiry:", err);
-      alert("Failed to delete inquiry.");
-    } finally {
-      setLoading(false);
-    }
-  };
-
->>>>>>> origin/development-
   return (
     <div className="space-y-8">
       {/* Toast Notification */}
@@ -1476,14 +993,8 @@ export default function ManualLeadsPage() {
                           <div className="flex items-center gap-1.5 text-xs text-slate-500">
                             <MapPin className="w-3.5 h-3.5 text-slate-400 shrink-0" />
                             <span>
-<<<<<<< HEAD
                               {group.area ? `${group.area}, ` : ""}
                               {group.city || "Bengaluru"}
-=======
-                              {group.mode === "Online"
-                                ? "Online Tuition"
-                                : `${group.area ? `${group.area}, ` : ""}${group.city || "Bengaluru"}`}
->>>>>>> origin/development-
                             </span>
                           </div>
 
@@ -1634,16 +1145,6 @@ export default function ManualLeadsPage() {
                           >
                             <Edit2 className="w-4 h-4" />
                           </button>
-<<<<<<< HEAD
-=======
-                          <button
-                            onClick={() => handleDeleteLead(group)}
-                            className="p-2 rounded-xl text-slate-400 hover:bg-red-50 hover:text-red-600 transition-colors"
-                            title="Delete Inquiry"
-                          >
-                            <Trash2 className="w-4 h-4" />
-                          </button>
->>>>>>> origin/development-
                         </div>
                       </td>
                     </tr>
@@ -1697,11 +1198,7 @@ export default function ManualLeadsPage() {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-xs font-bold text-slate-700 mb-1">
-<<<<<<< HEAD
                       Parent Legal Name *
-=======
-                      Parent / Guardian Name *
->>>>>>> origin/development-
                     </label>
                     <input
                       type="text"
@@ -1709,24 +1206,7 @@ export default function ManualLeadsPage() {
                       placeholder="e.g. Ramesh Sharma"
                       value={parentName}
                       onChange={(e) => setParentName(e.target.value)}
-<<<<<<< HEAD
                       className="w-full px-3.5 py-2.5 bg-white border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 font-medium"
-=======
-                      className="w-full px-3.5 py-2.5 bg-white border border-slate-300 rounded-xl text-sm text-slate-900 font-semibold placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:text-black focus:border-emerald-600"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-xs font-bold text-slate-700 mb-1">
-                      Email Address
-                    </label>
-                    <input
-                      type="email"
-                      placeholder="e.g. parent@example.com"
-                      value={parentEmail}
-                      onChange={(e) => setParentEmail(e.target.value)}
-                      className="w-full px-3.5 py-2.5 bg-white border border-slate-300 rounded-xl text-sm text-slate-900 font-semibold placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:text-black focus:border-emerald-600"
->>>>>>> origin/development-
                     />
                   </div>
 
@@ -1734,7 +1214,6 @@ export default function ManualLeadsPage() {
                     <label className="block text-xs font-bold text-slate-700 mb-1">
                       Phone Number (10 digits) *
                     </label>
-<<<<<<< HEAD
                     <input
                       type="tel"
                       required
@@ -1805,62 +1284,6 @@ export default function ManualLeadsPage() {
                   </div>
                 )}
 
-=======
-                    <div className="relative">
-                      <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-500 font-bold text-xs">+91</span>
-                      <input
-                        type="tel"
-                        required
-                        maxLength={10}
-                        placeholder="9876543210"
-                        value={parentPhone}
-                        onChange={(e) => {
-                          const val = e.target.value.replace(/\D/g, '').slice(0, 10);
-                          setParentPhone(val);
-                          if (sameAsPhone) setParentWhatsapp(val);
-                        }}
-                        className="w-full pl-11 pr-3.5 py-2.5 bg-white border border-slate-300 rounded-xl text-sm text-slate-900 font-semibold placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:text-black focus:border-emerald-600"
-                      />
-                    </div>
-                  </div>
-
-                  <div>
-                    <div className="flex items-center justify-between mb-1">
-                      <label className="block text-xs font-bold text-slate-700">
-                        WhatsApp Number *
-                      </label>
-                      <label className="flex items-center gap-1.5 text-[11px] font-semibold text-emerald-700 cursor-pointer bg-emerald-50 px-2 py-0.5 rounded-md hover:bg-emerald-100 transition-colors">
-                        <input
-                          type="checkbox"
-                          checked={sameAsPhone}
-                          onChange={(e) => {
-                            const checked = e.target.checked;
-                            setSameAsPhone(checked);
-                            if (checked) setParentWhatsapp(parentPhone);
-                          }}
-                          className="w-3.5 h-3.5 rounded text-emerald-600 focus:ring-emerald-500"
-                        />
-                        <span>Same as Phone</span>
-                      </label>
-                    </div>
-                    <div className="relative">
-                      <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-500 font-bold text-xs">+91</span>
-                      <input
-                        type="tel"
-                        maxLength={10}
-                        disabled={sameAsPhone}
-                        placeholder="9876543210"
-                        value={sameAsPhone ? parentPhone : parentWhatsapp}
-                        onChange={(e) => setParentWhatsapp(e.target.value.replace(/\D/g, '').slice(0, 10))}
-                        className={`w-full pl-11 pr-3.5 py-2.5 border border-slate-300 rounded-xl text-sm text-slate-900 font-semibold placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:text-black focus:border-emerald-600 ${
-                          sameAsPhone ? "bg-slate-100 text-slate-500 cursor-not-allowed" : "bg-white"
-                        }`}
-                      />
-                    </div>
-                  </div>
-                </div>
-
->>>>>>> origin/development-
                 <div>
                   <label className="block text-xs font-bold text-slate-700 mb-1">
                     Admin Consultation Notes (Internal or Special Parent Requests)
@@ -1870,16 +1293,11 @@ export default function ManualLeadsPage() {
                     placeholder="e.g. Mother requested female tutor if possible; student has upcoming term exam in 3 weeks."
                     value={adminNotes}
                     onChange={(e) => setAdminNotes(e.target.value)}
-<<<<<<< HEAD
                     className="w-full px-3.5 py-2.5 bg-white border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 font-medium"
-=======
-                    className="w-full px-3.5 py-2.5 bg-white border border-slate-300 rounded-xl text-sm text-slate-900 font-semibold placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:text-black focus:border-emerald-600"
->>>>>>> origin/development-
                   />
                 </div>
               </div>
 
-<<<<<<< HEAD
               {/* SECTION 2: Dynamic Students Builder */}
               <div className="space-y-4 bg-slate-50/70 p-5 rounded-2xl border border-slate-200/70">
                 <div className="flex items-center justify-between">
@@ -1926,111 +1344,19 @@ export default function ManualLeadsPage() {
                         <div>
                           <label className="block text-xs font-bold text-slate-700 mb-1">
                             Student Name *
-=======
-              {/* SECTION 2: Number of Students & Profiles */}
-              <div className="space-y-4 bg-slate-50/70 p-5 rounded-2xl border border-slate-200/70">
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-200 pb-3">
-                  <div className="flex items-center gap-2">
-                    <GraduationCap className="w-5 h-5 text-emerald-600" />
-                    <h3 className="font-bold text-sm text-slate-900 uppercase tracking-wider">
-                      Student Details
-                    </h3>
-                  </div>
-
-                  <div className="flex items-center gap-2">
-                    <label className="text-xs font-bold text-slate-700 whitespace-nowrap">
-                      Number of Students:
-                    </label>
-                    <select
-                      value={numberOfStudents}
-                      onChange={(e) => handleNumberOfStudentsChange(parseInt(e.target.value))}
-                      disabled={!!editingGroupId}
-                      className="px-3.5 py-1.5 bg-white border border-slate-300 rounded-xl text-xs font-bold text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 cursor-pointer disabled:opacity-60"
-                    >
-                      {[1, 2, 3, 4, 5].map((num) => (
-                        <option key={num} value={num}>
-                          {num} {num > 1 ? "Students" : "Student"}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                </div>
-
-                <div className="space-y-6">
-                  {studentsList.map((student, idx) => (
-                    <div
-                      key={student.id || idx}
-                      className="p-5 bg-white rounded-2xl border border-slate-200 shadow-xs space-y-4 relative"
-                    >
-                      <div className="flex items-center justify-between border-b border-slate-100 pb-2">
-                        <span className="text-xs font-black uppercase tracking-wider text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-lg border border-emerald-200">
-                          Student #{idx + 1} {numberOfStudents > 1 ? `of ${numberOfStudents}` : ""}
-                        </span>
-                      </div>
-
-                      {/* 1. Category */}
-                      <div>
-                        <label className="block text-xs font-bold text-slate-700 mb-1.5 flex items-center gap-1.5">
-                          <BookOpen className="w-3.5 h-3.5 text-emerald-600" />
-                          <span>Category *</span>
-                        </label>
-                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
-                          {[
-                            { id: "school", label: "School / Academics" },
-                            { id: "programming", label: "Programming / IT" },
-                            { id: "languages", label: "Languages" },
-                          ].map((cat) => {
-                            const isSelected = student.category === cat.id;
-                            return (
-                              <button
-                                key={cat.id}
-                                type="button"
-                                onClick={() => {
-                                  handleUpdateStudent(idx, "category", cat.id);
-                                  handleUpdateStudent(idx, "subjects", []);
-                                  handleUpdateStudent(idx, "technologies", []);
-                                  handleUpdateStudent(idx, "languages", []);
-                                }}
-                                className={`py-2 px-3 rounded-xl border text-xs font-bold transition-all ${
-                                  isSelected
-                                    ? "bg-emerald-600 text-white border-emerald-600 shadow-sm"
-                                    : "bg-white text-slate-700 border-slate-200 hover:bg-slate-50"
-                                }`}
-                              >
-                                {cat.label}
-                              </button>
-                            );
-                          })}
-                        </div>
-                      </div>
-
-                      {/* 2. Core Info: Name & Gender */}
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <div>
-                          <label className="block text-xs font-bold text-slate-700 mb-1">
-                            Student Full Name *
->>>>>>> origin/development-
                           </label>
                           <input
                             type="text"
                             required
-<<<<<<< HEAD
                             placeholder="e.g. Aryan Sharma"
                             value={student.name}
                             onChange={(e) => handleUpdateStudent(idx, "name", e.target.value)}
                             className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 font-medium"
-=======
-                            placeholder="Enter student full name"
-                            value={student.name}
-                            onChange={(e) => handleUpdateStudent(idx, "name", e.target.value)}
-                            className="w-full px-3.5 py-2.5 bg-white border border-slate-300 rounded-xl text-sm text-slate-900 font-semibold placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:text-black focus:border-emerald-600"
->>>>>>> origin/development-
                           />
                         </div>
 
                         <div>
                           <label className="block text-xs font-bold text-slate-700 mb-1">
-<<<<<<< HEAD
                             Gender
                           </label>
                           <select
@@ -2122,279 +1448,6 @@ export default function ManualLeadsPage() {
                           className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 font-medium"
                         />
                       </div>
-=======
-                            Gender *
-                          </label>
-                          <div className="flex gap-4 pt-2">
-                            {["Female", "Male", "Other"].map((item) => (
-                              <label key={item} className="flex items-center gap-1.5 font-semibold text-xs text-slate-700 cursor-pointer">
-                                <input
-                                  type="radio"
-                                  name={`gender_${idx}`}
-                                  value={item}
-                                  checked={student.gender === item}
-                                  onChange={() => handleUpdateStudent(idx, "gender", item as any)}
-                                  className="accent-emerald-600 w-4 h-4"
-                                />
-                                <span>{item}</span>
-                              </label>
-                            ))}
-                          </div>
-                        </div>
-                      </div>
-
-                      {/* 3. Budget Range Slider */}
-                      <div className="bg-slate-50 p-4 rounded-xl border border-slate-200">
-                        <div className="flex justify-between items-center mb-1.5">
-                          <span className="text-xs font-bold text-slate-700 flex items-center gap-1">
-                            <IndianRupee className="w-3.5 h-3.5 text-emerald-600" />
-                            <span>Expected Budget / Monthly Fee *</span>
-                          </span>
-                          <span className="text-emerald-700 font-bold text-sm">₹{student.budget || 5000}</span>
-                        </div>
-                        <input
-                          type="range"
-                          min={1000}
-                          max={20000}
-                          step={500}
-                          value={student.budget || 5000}
-                          onChange={(e) => handleUpdateStudent(idx, "budget", Number(e.target.value))}
-                          className="w-full accent-emerald-600 cursor-pointer"
-                        />
-                        <div className="flex justify-between text-[11px] text-slate-400 font-medium mt-1">
-                          <span>₹1,000</span>
-                          <span>₹20,000</span>
-                        </div>
-                      </div>
-
-                      {/* 4. Category-Specific Fields: School */}
-                      {student.category === "school" && (
-                        <div className="space-y-4 pt-2 border-t border-slate-100">
-                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                            <div>
-                              <label className="block text-xs font-bold text-slate-700 mb-1 flex items-center gap-1.5">
-                                <GraduationCap className="w-3.5 h-3.5 text-emerald-600" />
-                                <span>Student Type *</span>
-                              </label>
-                              <select
-                                value={student.studentType || "School Student"}
-                                onChange={(e) => {
-                                  handleUpdateStudent(idx, "studentType", e.target.value);
-                                  handleUpdateStudent(idx, "classLevel", "");
-                                  handleUpdateStudent(idx, "subjects", []);
-                                }}
-                                className="w-full px-3.5 py-2.5 bg-white border border-slate-300 rounded-xl text-sm text-slate-900 font-semibold focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:text-black focus:border-emerald-600"
-                              >
-                                <option value="School Student">School Student</option>
-                                <option value="College Student">College Student</option>
-                              </select>
-                            </div>
-
-                            <div>
-                              <label className="block text-xs font-bold text-slate-700 mb-1 flex items-center gap-1.5">
-                                <Building className="w-3.5 h-3.5 text-emerald-600" />
-                                <span>Class / Grade *</span>
-                              </label>
-                              <select
-                                required
-                                value={student.classLevel}
-                                onChange={(e) => {
-                                  handleUpdateStudent(idx, "classLevel", e.target.value);
-                                  handleUpdateStudent(idx, "subjects", []);
-                                }}
-                                className="w-full px-3.5 py-2.5 bg-white border border-slate-300 rounded-xl text-sm text-slate-900 font-semibold focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:text-black focus:border-emerald-600"
-                              >
-                                <option value="">Select class</option>
-                                {student.studentType === "College Student" ? (
-                                  <>
-                                    <option value="1st PU">1st PU</option>
-                                    <option value="2nd PU">2nd PU</option>
-                                    <option value="Degree">Degree</option>
-                                    <option value="Engineering">Engineering</option>
-                                    <option value="Medical">Medical</option>
-                                  </>
-                                ) : (
-                                  <>
-                                    <option value="LKG">LKG</option>
-                                    <option value="UKG">UKG</option>
-                                    {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map((num) => (
-                                      <option key={num} value={`${num}th Standard`}>{num}th Standard</option>
-                                    ))}
-                                  </>
-                                )}
-                              </select>
-                            </div>
-                          </div>
-
-                          <div>
-                            <label className="block text-xs font-bold text-slate-700 mb-2 flex items-center gap-1.5">
-                              <Award className="w-3.5 h-3.5 text-emerald-600" />
-                              <span>Board *</span>
-                            </label>
-                            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
-                              {["CBSE", "ICSE", "State Board", "IB / IGCSE"].map((item) => (
-                                <label
-                                  key={item}
-                                  className={`flex items-center gap-2 p-2.5 rounded-xl border cursor-pointer transition-all ${
-                                    student.board === item
-                                      ? "bg-emerald-50 border-emerald-600 text-emerald-800 font-bold"
-                                      : "bg-white border-slate-200 text-slate-600 hover:border-emerald-200"
-                                  }`}
-                                >
-                                  <input
-                                    type="radio"
-                                    name={`board_${idx}`}
-                                    value={item}
-                                    checked={student.board === item}
-                                    onChange={() => {
-                                      handleUpdateStudent(idx, "board", item);
-                                      handleUpdateStudent(idx, "subjects", []);
-                                    }}
-                                    className="accent-emerald-600"
-                                  />
-                                  <span className="text-xs">{item}</span>
-                                </label>
-                              ))}
-                            </div>
-                          </div>
-
-                          <div>
-                            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-2">
-                              <label className="block text-xs font-bold text-slate-700 flex items-center gap-1.5">
-                                <BookOpen className="w-3.5 h-3.5 text-emerald-600" />
-                                <span>Subjects *</span>
-                              </label>
-
-                              {isSeniorSecondary(student.classLevel) && (
-                                <div className="flex flex-wrap items-center gap-1 p-1 bg-slate-100 rounded-lg text-xs font-medium">
-                                  <span className="text-slate-500 px-1 text-[11px]">Stream:</span>
-                                  {(["All", "Science", "Commerce", "Arts / Humanities"] as const).map((st) => {
-                                    const active = (student.stream || "All") === st;
-                                    return (
-                                      <button
-                                        key={st}
-                                        type="button"
-                                        onClick={() => {
-                                          handleUpdateStudent(idx, "stream", st === "All" ? "" : st);
-                                          handleUpdateStudent(idx, "subjects", []);
-                                        }}
-                                        className={`px-2 py-0.5 rounded-md text-xs transition-colors ${
-                                          active 
-                                            ? "bg-white text-emerald-700 shadow-xs font-bold" 
-                                            : "text-slate-600 hover:bg-slate-200"
-                                        }`}
-                                      >
-                                        {st}
-                                      </button>
-                                    );
-                                  })}
-                                </div>
-                              )}
-                            </div>
-
-                            <div className="flex flex-wrap gap-1.5">
-                              {getSubjectsForStudent(student.board, student.classLevel, student.stream).map((sub) => {
-                                const isSelected = student.subjects.includes(sub);
-                                return (
-                                  <button
-                                    key={sub}
-                                    type="button"
-                                    onClick={() => {
-                                      const newSubjects = isSelected
-                                        ? student.subjects.filter((s) => s !== sub)
-                                        : [...student.subjects, sub];
-                                      handleUpdateStudent(idx, "subjects", newSubjects);
-                                    }}
-                                    className={`px-3 py-1.5 rounded-xl border text-xs font-bold transition-all active:scale-95 ${
-                                      isSelected
-                                        ? "bg-emerald-600 text-white border-emerald-600 shadow-xs"
-                                        : "bg-white border-slate-200 text-slate-600 hover:border-emerald-200 hover:bg-emerald-50/50"
-                                    }`}
-                                  >
-                                    {sub}
-                                  </button>
-                                );
-                              })}
-                            </div>
-                            {student.subjects.length === 0 && (
-                              <p className="text-[11px] text-amber-600 mt-1 font-semibold">Please select at least one subject.</p>
-                            )}
-                          </div>
-                        </div>
-                      )}
-
-                      {/* 5. Category-Specific Fields: Programming */}
-                      {student.category === "programming" && (
-                        <div className="pt-2 border-t border-slate-100 space-y-2">
-                          <label className="block text-xs font-bold text-slate-700 flex items-center gap-1.5">
-                            <Laptop className="w-3.5 h-3.5 text-emerald-600" />
-                            <span>Technologies & Frameworks *</span>
-                          </label>
-                          <div className="flex flex-wrap gap-1.5">
-                            {["Python", "Java", "AI & ML", "HTML & CSS", "Data Analytics", "Gen AI", "Agentic AI"].map((item) => {
-                              const isSelected = (student.technologies || []).includes(item);
-                              return (
-                                <button
-                                  key={item}
-                                  type="button"
-                                  onClick={() => {
-                                    const current = student.technologies || [];
-                                    const next = isSelected ? current.filter((t) => t !== item) : [...current, item];
-                                    handleUpdateStudent(idx, "technologies", next);
-                                  }}
-                                  className={`px-3 py-1.5 rounded-xl border text-xs font-bold transition-all active:scale-95 ${
-                                    isSelected
-                                      ? "bg-emerald-600 text-white border-emerald-600 shadow-xs"
-                                      : "bg-white border-slate-200 text-slate-600 hover:border-emerald-200 hover:bg-emerald-50/50"
-                                  }`}
-                                >
-                                  {item}
-                                </button>
-                              );
-                            })}
-                          </div>
-                          {(student.technologies || []).length === 0 && (
-                            <p className="text-[11px] text-amber-600 mt-1 font-semibold">Please select at least one technology.</p>
-                          )}
-                        </div>
-                      )}
-
-                      {/* 6. Category-Specific Fields: Languages */}
-                      {student.category === "languages" && (
-                        <div className="pt-2 border-t border-slate-100 space-y-2">
-                          <label className="block text-xs font-bold text-slate-700 flex items-center gap-1.5">
-                            <Languages className="w-3.5 h-3.5 text-emerald-600" />
-                            <span>Languages to Learn *</span>
-                          </label>
-                          <div className="flex flex-wrap gap-1.5">
-                            {["English", "Arabic", "German", "Japanese", "French", "Spanish"].map((item) => {
-                              const isSelected = (student.languages || []).includes(item);
-                              return (
-                                <button
-                                  key={item}
-                                  type="button"
-                                  onClick={() => {
-                                    const current = student.languages || [];
-                                    const next = isSelected ? current.filter((l) => l !== item) : [...current, item];
-                                    handleUpdateStudent(idx, "languages", next);
-                                  }}
-                                  className={`px-3 py-1.5 rounded-xl border text-xs font-bold transition-all active:scale-95 ${
-                                    isSelected
-                                      ? "bg-emerald-600 text-white border-emerald-600 shadow-xs"
-                                      : "bg-white border-slate-200 text-slate-600 hover:border-emerald-200 hover:bg-emerald-50/50"
-                                  }`}
-                                >
-                                  {item}
-                                </button>
-                              );
-                            })}
-                          </div>
-                          {(student.languages || []).length === 0 && (
-                            <p className="text-[11px] text-amber-600 mt-1 font-semibold">Please select at least one language.</p>
-                          )}
-                        </div>
-                      )}
->>>>>>> origin/development-
                     </div>
                   ))}
                 </div>
@@ -2405,7 +1458,6 @@ export default function ManualLeadsPage() {
                 <div className="flex items-center gap-2">
                   <BookOpen className="w-4 h-4 text-emerald-600" />
                   <h3 className="font-bold text-sm text-slate-900 uppercase tracking-wider">
-<<<<<<< HEAD
                     Tuition & Schedule Preferences
                   </h3>
                 </div>
@@ -2450,35 +1502,10 @@ export default function ManualLeadsPage() {
                           Creates individual cards for each student to hire different tutors.
                         </p>
                       </button>
-=======
-                    {studentsList.length > 1 ? "Student Groups & Schedule Preferences" : "Tuition & Schedule Preferences"}
-                  </h3>
-                </div>
-
-                {/* Drag and Drop Grouping Canvas */}
-                {studentsList.length > 1 && !editingGroupId && (
-                  <div className="space-y-4">
-                    <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs">
-                      <GroupManager 
-                        students={studentsList as any}
-                        onSave={(updated) => {
-                          setStudentsList(updated as any);
-                          setIsGroupsSaved(true);
-                          setGroupingStrategy('custom');
-                          setTimeout(() => {
-                            const prefEl = document.getElementById('group-preferences-section');
-                            if (prefEl) {
-                              prefEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                            }
-                          }, 150);
-                        }}
-                      />
->>>>>>> origin/development-
                     </div>
                   </div>
                 )}
 
-<<<<<<< HEAD
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-xs font-bold text-slate-700 mb-1">
@@ -2596,231 +1623,6 @@ export default function ManualLeadsPage() {
               </div>
 
               {/* Submit Buttons */}
-=======
-                {/* If multiple students and groups NOT saved yet: Show lock indicator */}
-                {studentsList.length > 1 && !isGroupsSaved && !editingGroupId ? (
-                  <div className="bg-amber-50 border border-amber-200 p-4 rounded-2xl flex items-center gap-3 text-amber-800 text-xs font-semibold">
-                    <AlertCircle className="w-4 h-4 text-amber-600 shrink-0" />
-                    <span>Please organize your students into groups above and click &quot;Save Groups&quot; to configure tuition &amp; schedule preferences below.</span>
-                  </div>
-                ) : (
-                  /* Form continues downward with preferences for each saved group */
-                  (() => {
-                    const groupsMap = new Map();
-                    if (studentsList.length > 1 && groupingStrategy === 'custom') {
-                      studentsList.forEach(s => {
-                        const gid = s.groupDocId || 'unassigned';
-                        const list = groupsMap.get(gid) || [];
-                        list.push(s);
-                        groupsMap.set(gid, list);
-                      });
-                    } else {
-                       groupsMap.set("all", studentsList);
-                    }
-                    
-                    return Array.from(groupsMap.entries()).map(([gid, groupStudents], groupIdx) => {
-                      const pref = groupPreferences[gid] || {
-                        mode: 'Offline',
-                        daysPerWeek: '5 Days/Week',
-                        specificDays: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
-                        preferredTimeRange: 'Evening (4 PM - 8 PM)',
-                        teacherGenderPreference: 'No Preference',
-                        addressFlat: '',
-                        addressStreet: '',
-                        addressPincode: '',
-                        city: 'Bengaluru',
-                      };
-                      
-                      const hasProgramming = groupStudents.some((s: any) => s.category === "programming");
-
-                      const updatePref = (field: string, val: any) => {
-                        setGroupPreferences(prev => ({
-                          ...prev,
-                          [gid]: { ...pref, [field]: val }
-                        }));
-                      };
-
-                      return (
-                        <div 
-                          key={gid} 
-                          id={groupIdx === 0 ? "group-preferences-section" : undefined}
-                          className="space-y-4 bg-white p-5 rounded-2xl border border-emerald-100 shadow-xs mt-4"
-                        >
-                          <div className="flex items-center gap-2 mb-2 pb-2 border-b border-slate-100">
-                            <BookOpen className="w-4 h-4 text-[#00a992]" />
-                            <h3 className="font-bold text-sm text-slate-800 uppercase tracking-wider">
-                              {gid === 'all' 
-                                ? 'Tuition & Schedule Preferences' 
-                                : `Group ${groupIdx + 1} Preferences: ${groupStudents.map((s: any) => s.name || 'Student').join(', ')}`}
-                            </h3>
-                          </div>
-
-                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                            <div>
-                              <label className="block text-xs font-bold text-slate-700 mb-1">Delivery Mode *</label>
-                              {hasProgramming ? (
-                                <div className="w-full px-3.5 py-2.5 bg-emerald-50 border border-emerald-200 rounded-xl text-xs font-bold text-emerald-800 flex items-center gap-2">
-                                  <Laptop className="w-3.5 h-3.5 text-emerald-600" />
-                                  <span>Online Only (For Programming)</span>
-                                </div>
-                              ) : (
-                                <select 
-                                  value={pref.mode} 
-                                  onChange={e => updatePref('mode', e.target.value)} 
-                                  className="w-full px-3.5 py-2.5 bg-white border border-slate-300 rounded-xl text-sm font-semibold text-slate-900 focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600"
-                                >
-                                  <option value="Offline">Offline (Home Tuition)</option>
-                                  <option value="Online">Online Tuition</option>
-                                </select>
-                              )}
-                            </div>
-
-                            <div>
-                              <label className="block text-xs font-bold text-slate-700 mb-1">Teacher Gender *</label>
-                              <select 
-                                value={pref.teacherGenderPreference} 
-                                onChange={e => updatePref('teacherGenderPreference', e.target.value)} 
-                                className="w-full px-3.5 py-2.5 bg-white border border-slate-300 rounded-xl text-sm font-semibold text-slate-900 focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600"
-                              >
-                                <option value="No Preference">No Preference</option>
-                                <option value="Female">Female Tutor Preferred</option>
-                                <option value="Male">Male Tutor Preferred</option>
-                              </select>
-                            </div>
-
-                            <div>
-                              <label className="block text-xs font-bold text-slate-700 mb-1">Preferred Time Slot *</label>
-                              <select 
-                                value={pref.preferredTimeRange} 
-                                onChange={e => updatePref('preferredTimeRange', e.target.value)} 
-                                className="w-full px-3.5 py-2.5 bg-white border border-slate-300 rounded-xl text-sm font-semibold text-slate-900 focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600"
-                              >
-                                <option value="Flexible / Any Time">Flexible / Any Time</option>
-                                <option value="Morning (8 AM - 12 PM)">Morning (8 AM - 12 PM)</option>
-                                <option value="Afternoon (12 PM - 4 PM)">Afternoon (12 PM - 4 PM)</option>
-                                <option value="Evening (4 PM - 8 PM)">Evening (4 PM - 8 PM)</option>
-                                <option value="Night (After 8 PM)">Night (After 8 PM)</option>
-                              </select>
-                            </div>
-
-                            <div>
-                              <label className="block text-xs font-bold text-slate-700 mb-1">Days per Week *</label>
-                              <select 
-                                value={pref.daysPerWeek} 
-                                onChange={e => updatePref('daysPerWeek', e.target.value)} 
-                                className="w-full px-3.5 py-2.5 bg-white border border-slate-300 rounded-xl text-sm font-semibold text-slate-900 focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600"
-                              >
-                                <option value="1 Day/Week">1 Day / Week</option>
-                                <option value="2 Days/Week">2 Days / Week</option>
-                                <option value="3 Days/Week">3 Days / Week</option>
-                                <option value="4 Days/Week">4 Days / Week</option>
-                                <option value="5 Days/Week">5 Days / Week</option>
-                                <option value="6 Days/Week">6 Days / Week</option>
-                                <option value="Daily">Daily</option>
-                              </select>
-                            </div>
-                          </div>
-
-                          {/* Offline Address Fields if mode is Offline */}
-                          {pref.mode === 'Offline' && !hasProgramming && (
-                            <div className="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-3">
-                              <label className="block text-xs font-bold text-slate-700 flex items-center gap-1.5">
-                                <MapPin className="w-3.5 h-3.5 text-emerald-600" />
-                                <span>Group Address (Offline Home Tuition)</span>
-                              </label>
-                              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3">
-                                <input
-                                  type="text"
-                                  placeholder="Flat / House No. & Building"
-                                  value={pref.addressFlat || ''}
-                                  onChange={e => updatePref('addressFlat', e.target.value)}
-                                  className="w-full px-3 py-2 bg-white border border-slate-300 rounded-lg text-xs font-semibold text-slate-900 placeholder:text-slate-400"
-                                />
-                                <input
-                                  type="text"
-                                  placeholder="Street & Locality / Area"
-                                  value={pref.addressStreet || ''}
-                                  onChange={e => updatePref('addressStreet', e.target.value)}
-                                  className="w-full px-3 py-2 bg-white border border-slate-300 rounded-lg text-xs font-semibold text-slate-900 placeholder:text-slate-400"
-                                />
-                                <input
-                                  type="text"
-                                  placeholder="City (e.g. Bengaluru)"
-                                  value={pref.city || 'Bengaluru'}
-                                  onChange={e => updatePref('city', e.target.value)}
-                                  className="w-full px-3 py-2 bg-white border border-slate-300 rounded-lg text-xs font-semibold text-slate-900 placeholder:text-slate-400"
-                                />
-                                <input
-                                  type="text"
-                                  placeholder="Pincode"
-                                  value={pref.addressPincode || ''}
-                                  onChange={e => updatePref('addressPincode', e.target.value)}
-                                  className="w-full px-3 py-2 bg-white border border-slate-300 rounded-lg text-xs font-semibold text-slate-900 placeholder:text-slate-400"
-                                />
-                              </div>
-                            </div>
-                          )}
-
-                          {/* Specific Days */}
-                          <div>
-                            <label className="block text-xs font-bold text-slate-700 mb-1.5">Specific Days Scheduled (Optional)</label>
-                            <div className="flex flex-wrap gap-1.5">
-                              {['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'].map(d => {
-                                const isSel = (pref.specificDays || []).includes(d);
-                                return (
-                                  <button 
-                                    key={d} 
-                                    type="button" 
-                                    onClick={() => {
-                                      const current = pref.specificDays || [];
-                                      const newDays = isSel ? current.filter((day: string) => day !== d) : [...current, d];
-                                      updatePref('specificDays', newDays);
-                                    }} 
-                                    className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${
-                                      isSel 
-                                        ? 'bg-emerald-600 text-white' 
-                                        : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-50'
-                                    }`}
-                                  >
-                                    {d}
-                                  </button>
-                                );
-                              })}
-                            </div>
-                          </div>
-
-                          {/* Auto-Calculated Group Monthly Budget */}
-                          <div className="bg-emerald-50/70 p-4 rounded-2xl border border-emerald-200/80 flex flex-col sm:flex-row sm:items-center justify-between gap-3 mt-4">
-                            <div>
-                              <div className="flex items-center gap-2">
-                                <IndianRupee className="w-4 h-4 text-emerald-600 shrink-0" />
-                                <p className="text-xs font-black text-emerald-950 uppercase tracking-wider">Group Monthly Budget</p>
-                                <span className="text-[10px] font-bold bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-full border border-emerald-300/60">
-                                  Auto-calculated
-                                </span>
-                              </div>
-                              <p className="text-xs text-emerald-700/90 mt-1 font-medium">
-                                Sum of {groupStudents.length} student budget{groupStudents.length > 1 ? "s" : ""}: {groupStudents.map((s: any) => `${s.name || 'Student'} (₹${Number(s.budget || 0).toLocaleString()})`).join(", ")}
-                              </p>
-                            </div>
-                            <div className="text-left sm:text-right shrink-0">
-                              <div className="text-xl font-black text-emerald-800 flex items-center sm:justify-end">
-                                <span>₹{groupStudents.reduce((acc: number, curr: any) => acc + (Number(curr.budget) || 0), 0).toLocaleString()}</span>
-                                <span className="text-xs font-bold text-emerald-600/70 ml-1">/mo</span>
-                              </div>
-                              <span className="text-[10px] font-semibold text-emerald-600 block">Combined monthly fees</span>
-                            </div>
-                          </div>
-                        </div>
-                      );
-                    });
-                  })()
-                )}
-
-              </div>
-              
-{/* Submit Buttons */}
->>>>>>> origin/development-
               <div className="flex items-center justify-end gap-3 pt-4 border-t border-slate-100">
                 <button
                   type="button"
